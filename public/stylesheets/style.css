@@ -1,0 +1,36 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+form{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+}
+.input-wrapper{
+  background-color: #d9e3dd;
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  padding: 0 2px;
+  transition: ease-in-out .1s;
+  pointer-events: none;
+}
+input,
+textarea{
+  background-color: transparent;
+  padding: 12px 20px;
+  border: 1px solid #4d4d4d;
+  border-radius: 20px;
+  font-size: 16px;
+  outline: none;
+  font-family: 'Poppins' sans-serif;
+}
+input:focus+label{
+  top: -12px;
+}

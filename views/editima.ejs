@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editando</title>
+    <link rel="stylesheet" href="../stylesheets/style.css">
+</head>
+<body>
+
+    <form action="/editima/" method="post">
+        <input type="hidden" value="<%= imagen.id %>" name="id">
+        <label for="url">Url</label>
+        <input type="text" name="url" value="<%= imagen.url %>"
+        placeholder="Nueva Url" required>
+        <label for="producto_id">Producto ID</label>
+        <input type="text" name="producto_id" value="<%= imagen.producto_id %>">
+        <label for="destacado">Destacado</label>
+        <input type="text" name="destacado" value="<%= imagen.destacado %>">
+        <input type="submit" value="Editar">
+
+
+    </form>
+
+</body>
+</html>

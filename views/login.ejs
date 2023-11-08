@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../stylesheets/login.css">
+  <title>Login</title>
+</head>
+<body>
+  
+  <div class="background">
+      <div class="shape"></div>
+      <div class="shape"></div>
+  </div>
+
+  <form action="/login" method="post">
+    <h3>Inicio</h3>
+    <label for="username">Nombre de Usuario</label>
+    <input type="text" placeholder="Usuario" name="user" value="" required>
+    <label for="password" required>Contraseña</label>
+    <input type="password" placeholder="Contraseña" name="pass" value="" required>
+    <button type="submit" value="Login" required>Iniciar Sesión</button>
+  </form>
+
+</body>
+</html>

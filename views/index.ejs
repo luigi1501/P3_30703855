@@ -17,7 +17,7 @@
       </div>
 
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li class="nav-link px-2 link-secondary">ElectroShop - Admin</li>
+        <li class="nav-link px-2 link-secondary">ElectroShop</li>
       </ul>
 
       <div class="col-md-3 text-end">
@@ -25,52 +25,84 @@
       </div>
       
     </header>
+    <div class="container">
+      <div class="titulo">
+          <h1>Pagina Productos: <%= producto.length %>
+          </h1>
+      </div>
+      <div>
+          <table class="table">
+              <!-- <caption>Productos</caption> -->
+              <tr>
+                  <th>
+                      <p>ID</p>
+                  </th>
+                  <th>
+                      <p>Codigo</p>
+                  </th>
+                  <th>
+                      <p>Nombre</p>
+                  </th>
+                  <th>
+                      <p>Marca</p>
+                  </th>
+                  <th>
+                      <p>Modelo</p>
+                  </th>
+                  <th>
+                      <p>Descripcion</p>
+                  </th>
+                  <th>
+                      <p>Precio</p>
+                  </th>
+              </tr>
+              <tr>
+                  <% if (producto) { %>
+                      <% for (let i=0; i < producto.length; i++){ %>
+                          <% if (producto) { %>
+              <tr>
+
+                  <td>
+                      <%= producto[i].id %>
+                  </td>
+                  <td>
+                      <%= producto[i].code %>
+                  </td>
+                  <td>
+                      <%= producto[i].name %>
+                  </td>
+                  <td>
+                      <%= producto[i].brand %>
+                  </td>
+                  <td>
+                      <%= producto[i].model %>
+                  </td>
+                  <td>
+                      <%= producto[i].description %>
+                  </td>
+                  <td>
+                    <%= producto[i].price %>
+                </td>
+                  <td>
+                      <div class="input">
+                        <a href="/edit/<%=producto[i].id%>" class="btn btn-dark">Editar</a>
+                        <a href="/delete/<%=producto[i].id%>" class="btn btn-dark">Eliminar</a>
+                      </div>
+                  </td>
+              </tr>
+              <% } %>
+                  <% } %>
+                      <% } else { %>
+                          <tr>
+                              <th>No hay productos en el sistema</th>
+                          </tr>
+                          <% } %>
+                              </tr>
+          </table>
+      </div>
   </div>
-  <div class="bd-example">
-    <table class="table">
-        <thead>
-      <tr>
-        <th>ID</th>
-        <th>Código</th>
-        <th>Nombre</th>
-        <th>Marca</th>
-        <th>Modelo</th>
-        <th>Descripción</th>
-        <th>Precio</th>
-        <th>Categoría</th>
-        <th>Opciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <% producto.forEach(product => { %>
-          <tr>
-            <td><%= product.id %></td>
-            <td><%= product.code %></td> 
-            <td><%= product.name %></td>
-            <td><%= product.brand %></td>
-            <td><%= product.model %></td>
-            <td><%= product.description %></td>
-            <td><%= product.price %></td>
-            <td><% if(product.category_id == 1){ %>
-                    Televisor
-                <% } else if(product.category_id == 2) { %>
-                   Nevera
-            <% } %>
-            <td><a href="/edit/<%=product.id%>" class="btn btn-dark">Editar</a>
-              <a href="/delete/<%=product.id%>" class="btn btn-dark">Eliminar</a>
-            </td>
-          <% }); %></td>
 
 
-      </tr>
-    </tbody>
-  
-    </table>
-  </div>
-
-<a href="/insert" class="btn btn-dark">Insertar producto</a>
-</tbody>
-
+              <a href="/insert" class="btn btn-dark">Insertar producto</a>
 </body>
 </html>

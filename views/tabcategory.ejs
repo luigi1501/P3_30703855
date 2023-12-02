@@ -24,36 +24,52 @@
         <a href="/" class="btn btn-primary">Salir</a>
       </div>
     </header>
-  </div>
-  <div class="bd-example">
-    <table class="table">
-        <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
+    <div class="container">
+      <div class="titulo">
+          <h1>Pagina Categorias <%= category.length %>
+          </h1>
+      </div>
 
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <% category.forEach(categories => { %>
+      <table class="table">
+          <!-- <caption>Categorias</caption> -->
           <tr>
-            <td><%= categories.id %></td>
-            <td><%= categories.name %></td> 
-            <td><a href="/editcat/<%=categories.id%>" class="btn btn-dark">Editar</a>
-              <a href="/deletecat/<%=categories.id%>" class="btn btn-dark">Eliminar</a>
-            </td>
-          <% }); %></td>
-
-
-      </tr>
-    </tbody>
-  
-    </table>
+              <th>
+                  <p>N°</p>
+              </th>
+              <th>
+                  <p>Nombre</p>
+              </th>
+              <td><a href="/insertcat" class="btn btn-dark">Insertar categoría</a></td>
+          </tr>
+          <tr>
+              <% if (category) { %>
+                  <% for (let i=0; i < category.length; i++){ %>
+                      <% if (category) { %>
+          <tr>
+              <td>
+                  <%= (i + 1)  %>
+              </td>
+              <td>
+                  <%= category[i].name %>
+              </td>
+              <td>
+                  <div class="input-group">
+                    <td><a href="/editcat/<%=category[i].id%>" class="btn btn-dark">Editar</a>
+                      <a href="/deletecat/<%=category[i].id%>" class="btn btn-dark">Eliminar</a>
+                  </div>
+              </td>
+          </tr>
+          <% } %>
+              <% } %>
+                  <% } else { %>
+                      <tr>
+                          <th class="display-6">No hay categorias en el sistema</th>
+                      </tr>
+                      <% } %>
+                          </tr>
+      </table>
   </div>
 
-<a href="/insertcat" class="btn btn-dark">Insertar categoría</a>
-</tbody>
 
 </body>
-</html>
+</html>           

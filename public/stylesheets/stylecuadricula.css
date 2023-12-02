@@ -1,0 +1,107 @@
+/* Style the body */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #17191f7c;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    color: #333;
+    border: 5px solid #E6E6E6;
+  }
+  
+  /* Style the heading */
+  h1 {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+    border-bottom: 1px solid #283E5F;
+    box-shadow: 0 0 5px #283E5F;
+  }
+  
+  /* Style the product grid container */
+  .product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto 20px;
+    width: 80%;
+  }
+  
+  /* Style the product items */
+  .product {
+    width: 200px;
+    height: 385px;
+    margin:20px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    background-color: #F2F2F2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style the product image */
+  .product img {
+    width: 100%;
+    height: 125px;
+    object-fit: cover;
+    display: flex;
+    border-radius: 25px;
+  }
+  
+  /* Style the product name */
+  .product h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Style the product price */
+  .product p {
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  /* Style the buttons */
+  a.button {
+    float: right;
+    border-radius: 5px;
+    background-color: rgba(11, 228, 243, 0.5);
+    color: #130707;
+    margin-right: 20px;
+    font-size: 15px;
+    padding: 5px 10px;
+    transition: background-color 0.2s ease-in-out;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-decoration: none; /* Remove underline */
+    border-radius: 25px;
+  }
+  
+  a.button:hover {
+    background-color: rgb(7, 22, 37)00;
+    box-shadow: inset 0 0 0 2em #a3aeb9;
+  }
+
+.my-title {
+ clear: right;
+ display: block;
+ 
+}
+
+.compra {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: rgb(14, 9, 9);
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 25px;
+}

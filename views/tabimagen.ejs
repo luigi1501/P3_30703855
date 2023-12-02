@@ -25,39 +25,63 @@
       </div>
     </header>
   </div>
-  <div class="bd-example">
-    <table class="table">
-        <thead>
-      <tr>
-        <th>ID</th>
-        <th>Url</th>
-        <th>Producto ID</th>
-        <th>destacado</th>
+  <div class="container">
+    <div class="titulo">
+        <h1>Pagina Imagenes <%= imagen.length %>
+        </h1>
+    </div>
 
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <% imagen.forEach(image => { %>
-          <tr>
-            <td><%= image.id %></td>
-           <td> <img alt="5" width="210" height="130" src="<%=image.url%>"> </td>
-            <td><%= image.producto_id%></td>
-            <td><%= image.destacado %></td>
-            <td><a href="/editima/<%=image.id%>" class="btn btn-dark">Editar</a>
-              <a href="/deleteima/<%=image.id%>" class="btn btn-dark">Eliminar</a>
-            </td>
-          <% }); %></td>
-
-
-      </tr>
-    </tbody>
-  
-    </table>
-  </div>
-
+    <div>
+        <table class="table">
+            <!-- <caption>Imagenes</caption> -->
+            <tr>
+                <th>
+                    <p>N°</p>
+                </th>
+                <th>
+                    <p>Imagen</p>
+                </th>
+                <th>
+                    <p>Destacado</p>
+                </th>
+                <th>
+                  <p>producto_id</p>
+              </th>
+            </tr>
+            <tr>
+                <% if (imagen) { %>
+                    <% for (let i=0; i < imagen.length; i++){ %>
+                        <% if (imagen) { %>
+            <tr>
+                <td>
+                    <%= (i + 1) %>
+                </td>
+                <td><img class="imagen-producto" src="<%= imagen[i].url %>" width="180px" height="135px"> </td>
+                <td>
+                    <%= imagen[i].destacado %>
+                </td>
+                <td>
+                  <%= imagen[i].producto_id %>
+              </td>
+                <td>
+                        <a href="/deleteima/<%= imagen[i].id%>" class="btn btn-dark">Eliminar</a>
+                        <a href="/editima/<%= imagen[i].id%>" class="btn btn-dark">Actualizar</a>
+                </td>
+            </tr>
+            <% } %>
+                <% } %>
+                    <% } else { %>
+                        <tr>
+                            <th>
+                                <p>No hay imagenes en el sistema.</p>
+                            </th>
+                        </tr>
+                        <% } %>
+                            </tr>
+        </table>
+    </div>
+</div>
 <a href="/insertima" class="btn btn-dark">Insertar Imagen</a>
-</tbody>
 
 </body>
 </html>

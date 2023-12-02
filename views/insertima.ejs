@@ -9,16 +9,33 @@
 </head>
 <body>
     <form action="/insertima" method="post">
+   
         <h2>Agregar Imagen</h2>
         <label for="url">url:</label>
         <input type="text" name="url" required >
-        <label for="producto">inserte id:</label>
-        <input type="text" name="producto_id" required>
-        <label for="destacado">destacado:</label>
-        <input type="text" name="destacado" required>
-        <input type="submit" value="Insertar" href="/tabimagen">
+
+
     
-    </form>
-    
+    <label for=""></label>
+    <select name="destacado" id="destacado">
+        <option value="">--Seleccione--</option>
+        <option value="Si">Si</option>
+        <option value="No">NO</option>
+    </select>
+
+    <select name="producto_id" required>
+        <option value="">--Seleccione--</option>
+        <% if (producto) { %>
+            <% for (let i = 0; i < producto.length; i++){  %>
+                <% if (producto) { %>
+                    <option value="<%= producto[i].id %>" id="producto_id" name="producto_id" required><%= producto[i].name %></option>
+                <% } %>
+            <% } %>
+        <% } else { %>
+                    <option value="">No existen productos en el sistema</option>
+            <% }   %>
+    </select>
+            <input type="submit" value="Insertar" href="/tabimagen">
+        </form>
 </body>
 </html>

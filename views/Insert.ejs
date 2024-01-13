@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../stylesheets/style.css">
 </head>
 <body>
-<<<<<<< HEAD:views/Insert.ejs
     <body>
 
         <div class="container">
@@ -19,23 +18,35 @@
         
         
             <form action="/insert" method="post" class="form">
-                <div class="form">
-                    <input  type="number" name="code" placeholder="Ingrese el código del producto" required/>
+                <div class="form-control">
+                    <input  type="number" name="code" placeholder="Ingrese el código del producto" required maxlength="45" minlength="3"/>
+                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-exclamation-circle"></i>
                 </div>
-                <div class="form">
+                <div class="form-control">
                     <input type="text" name="name" placeholder="Ingrese el nombre del producto" required/>
+                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-exclamation-circle"></i>
                 </div>
-                <div class="form">
+                <div class="form-control">
                     <input type="text" name="brand" placeholder="Ingrese la marca del producto" required/>
+                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-exclamation-circle"></i>
                 </div>
-                <div class="form">
+                <div class="form-control">
                     <input type="text" name="model" placeholder="Ingrese el modelo del producto" required/>
+                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-exclamation-circle"></i>
                 </div>
-                <div class="form">
+                <div class="form-control">
                     <input type="text" name="description" placeholder="Ingrese la descripción del producto" required/>
+                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-exclamation-circle"></i>
                 </div>
-                <div class="form">
+                <div class="form-control">
                     <input type="text" name="price" placeholder="Ingrese el precio del producto" required/>
+                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-exclamation-circle"></i>
                 </div>
                 <select name="category_id" required>
                     <option value="" >--Seleccione--</option>
@@ -55,31 +66,3 @@
         </div>
 </body>
 </html>        
-=======
-    <form action="/insert" method="post">
-        <label for="code">Código</label>
-        <input type="number" name="code" value="" placeholder="Código del producto" required>
-        <label for="name">Nombre del Producto</label>
-        <input type="text" name="name" value="" placeholder="Nombre del Producto" required>
-        <label for="brand">Marca</label>
-        <input type="text" name="brand" value="" placeholder="Marca del Producto" required>
-        <label for="model">Modelo</label>
-        <input type="text" name="model" value="" placeholder="Modelo del Producto" required>
-        <label for="description">Descripción</label>
-        <textarea type="text" name="description" value="" placeholder="Descripción del producto" required></textarea>
-        <label for="price">Precio</label>
-        <input type="text" name="price" value="" placeholder="Precio del Producto" required>
-        <label for="category_id">Categoría</label>
-        <select name="category_id" required>
-            <option value="1">Cocina</option>
-            <option value="2">Nevera</option>
-            <option value="3">Televisores</option>
-            <option value="4">Aire</option>
-        </select>
-        <input type="submit" value="Insertar" href="/index">
-    
-    </form>
-    
-</body>
-</html>
->>>>>>> e2b843f4e2f7effdbe7c46ea132ed69eb507fdca:views/insert.ejs

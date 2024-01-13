@@ -9,7 +9,9 @@
 </head>
 <body>
   <a class="button" href="/login">Interfaz Administrativa</a>
+  <a class="button" href="/userini">Interfaz Pública</a>
   <h1 class="my-title">Listado de Productos</h1>
+
 
   <div class="filters">
     <%- include('./filters') -%>
@@ -17,7 +19,7 @@
   <div class="product-grid">
     <% producto.forEach(producto => { %>
       <div class="product">
-        <a href="#" class="compra">Comprar ahora</a>
+        <a href="/userini" class="compra">Comprar ahora</a>
         <h2><%= producto.producto_name %></h2>
         <p>Precio: <%= producto.price %></p>
         <p>Descripción: <%= producto.description %></p>
@@ -29,7 +31,7 @@
         <% } else { %>
           No hay imagen disponible
         <% } %>
-        <a href="/producto?id<%= producto.id %>" class="button">Ver detalles del producto <%= producto.producto_name %></a>
+        <a href="/detalles/<%= producto.producto_id %>" class="button">Ver detalles del producto <%= producto.producto_name %></a>
       </div>
     <% }); %>
   </div>

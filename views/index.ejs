@@ -17,11 +17,9 @@
       </div>
 
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-<<<<<<< HEAD
+
         <li class="nav-link px-2 link-secondary">ElectroShop</li>
-=======
         <li class="nav-link px-2 link-secondary">ElectroShop - Admin</li>
->>>>>>> e2b843f4e2f7effdbe7c46ea132ed69eb507fdca
       </ul>
 
       <div class="col-md-3 text-end">
@@ -29,7 +27,6 @@
       </div>
       
     </header>
-<<<<<<< HEAD
     <div class="container">
       <div class="titulo">
           <h1>Pagina Productos: <%= producto.length %>
@@ -66,48 +63,6 @@
                       <% for (let i=0; i < producto.length; i++){ %>
                           <% if (producto) { %>
               <tr>
-=======
-  </div>
-  <div class="bd-example">
-    <table class="table">
-        <thead>
-      <tr>
-        <th>ID</th>
-        <th>Código</th>
-        <th>Nombre</th>
-        <th>Marca</th>
-        <th>Modelo</th>
-        <th>Descripción</th>
-        <th>Precio</th>
-        <th>Categoría</th>
-        <th>Opciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <% producto.forEach(product => { %>
-          <tr>
-            <td><%= product.id %></td>
-            <td><%= product.code %></td> 
-            <td><%= product.name %></td>
-            <td><%= product.brand %></td>
-            <td><%= product.model %></td>
-            <td><%= product.description %></td>
-            <td><%= product.price %></td>
-            <td><% if(product.category_id == 1){ %>
-                    Cocina
-                <% } else if(product.category_id == 2) { %>
-                   Nevera
-                <% } else if(product.category_id == 3) { %>
-                   Televisor
-                <% } else if(product.category_id == 4) { %>
-                   Aire
-            <% } %>
-            <td><a href="/edit/<%=product.id%>" class="btn btn-dark">Editar</a>
-              <a href="/delete/<%=product.id%>" class="btn btn-dark">Eliminar</a>
-            </td>
-          <% }); %></td>
->>>>>>> e2b843f4e2f7effdbe7c46ea132ed69eb507fdca
 
                   <td>
                       <%= producto[i].id %>

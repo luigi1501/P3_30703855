@@ -10,20 +10,21 @@ form{
   display: flex;
   flex-direction: column;
   gap: 5px;
-  position: center;
+  position: relative;
 }
 .input-wrapper{
   background-color: #D9DCE3;
-  position: center;
+  position: absolute;
   left: 20px;
-  top: 30px;
-  padding: 5 2px;
+  top: 10px;
+  padding: 0 2px;
   transition: ease-in-out .1s;
+  pointer-events: none;
 }
 input,
 textarea{
   background-color: transparent;
-  padding: 12px 200px;
+  padding: 12px 20px;
   border: 1px solid #4D4D4D;
   border-radius: 20px;
   font-size: 16px;
@@ -31,5 +32,5 @@ textarea{
   font-family: 'Poppins' sans-serif;
 }
 input:focus+label{
-  top: -1px;
+  top: -12px;
 }

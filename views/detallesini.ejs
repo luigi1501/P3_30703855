@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>detalles</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/stylecuadricula.css">
+</head>
+<a class="button" href="/pageini">Volver</a>
+<body>
+  <h1 class="my-title">detalles</h1>
+  
+  <div class="product-grid">
+              <div class="product">
+                <a href="/payments" class="compra">Comprar ahora</a>
+                <h2><%= producto.name %></h2>
+                <p>Precio: <%= producto.price %></p>
+                <p>Descripción: <%= producto.description %></p>
+                <p>Categoria: <%= producto.category_id %></p>
+                <p>Modelo: <%= producto.brand %></p>
+                <p>Marca: <%= producto.model %></p>
+                <% imagen.forEach(images => { %>
+                  <% if (producto.id == images.producto_id) { %>
+                    <img alt="Product image" src="<%= images.url %>" width="200" height="150">
+                  <% } %>
+                <% }); %>
+      </div>
+      
+</div>
+</body>
+</html>

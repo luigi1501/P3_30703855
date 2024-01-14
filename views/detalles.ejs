@@ -7,25 +7,26 @@
   <title>detalles</title>
   <link rel="stylesheet" type="text/css" href="/stylesheets/stylecuadricula.css">
 </head>
+<a class="button" href="/">Volver</a>
 <body>
   <h1 class="my-title">detalles</h1>
+  
   <div class="product-grid">
-    <% producto.forEach(producto => { %>
-      <div class="product">
-        <h2><%= producto.producto_name %></h2>
-        <p>codigo: <%= producto.producto_code %></p>
-        <p>Precio: <%= producto.price %></p>
-        <p>Descripción: <%= producto.description %></p>
-        <p>Categoria: <%= producto.category_name %></p>
-        <p>Modelo: <%= producto.brand %></p>
-        <p>Marca: <%= producto.model %></p>
-        <% if (producto.imagen_url) { %>
-          <img alt="Product image" src="<%= producto.imagen_url %>" width="200" height="150">
-        <% } else { %>
-          No hay imagen disponible
-        <% } %>
+              <div class="product">
+                <a href="/userini" class="compra">Comprar ahora</a>
+                <h2><%= producto.name %></h2>
+                <p>Precio: <%= producto.price %></p>
+                <p>Descripción: <%= producto.description %></p>
+                <p>Categoria: <%= producto.category_id %></p>
+                <p>Modelo: <%= producto.brand %></p>
+                <p>Marca: <%= producto.model %></p>
+                <% imagen.forEach(images => { %>
+                  <% if (producto.id == images.producto_id) { %>
+                    <img alt="Product image" src="<%= images.url %>" width="200" height="150">
+                  <% } %>
+                <% }); %>
       </div>
-    <% }); %>
+      
 </div>
 </body>
 </html>

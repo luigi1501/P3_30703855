@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link href="/stylesheets/style1.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <header>
+    <div class="menu logo-nav">
+      <a href="/pageini" class="logo">KeyZone</a>
+      <label class="menu-icon"><span class="fas fa-bars icomin"></span></label>
+      <nav class="navigation">
+        <ul>
+          <li><a href="/login">Administrar</a></li>
+          <li><a href="/pageini">Volver</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <div class="container-contacto">
+  
+
+  <form action="/compra" id="form" method="post">
+    <h2>Compra</h2>
+    <br>
+
+    <label for="producto">Seleccione el producto</label>
+    <br>
+    <select id="categoria" name="producto_id" required>
+      <% producto.forEach(producto => { %>
+        <option value="<%= producto.id %>"><%= producto.name %> <%= producto.price %></option>
+      <% }) %>
+    </select>
+
+    <br>
+<br>
+    <label for="client">Seleccione el cliente</label>
+    <br>
+    <select id="categoria" name="cliente_id" required>
+      <% cliente.forEach(client => { %>
+        <option value="<%= client.id %>"><%= client.email %></option>
+      <% }) %>
+    </select>
+
+
+
+    <br>
+
+   
+
+<br>
+    <label for="cantidad">Indique la cantidad</label>
+    <input type="number" placeholder="Cantidad" name="cantidad" value="" required>
+
+    
+    <input type="submit" id="button-contacto" value="Comprar" class="button">
+  </form>
+
+  </div>
+
+    </footer>  
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script  src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+    <script  src="assets/js/scripts.js"></script>
+    <script  src="assets/js/contacto.js"></script>
+</body>
+</html>

@@ -1,6 +1,8 @@
 const db = require('./connection');
 
 let querys = {
+    getuser:'SELECT * FROM usuarios',
+    register:'INSERT INTO usuarios(name, email, password) VALUES(?, ?, ?)',
     getproducto: 'SELECT * FROM producto',
     getproductoID: 'SELECT * FROM producto WHERE id = ?',
     getimagenID: 'SELECT * FROM imagen WHERE id = ?',
@@ -17,12 +19,62 @@ let querys = {
     deleteimagen: 'DELETE FROM imagen WHERE id = ?',
     deletecategory: 'DELETE FROM category WHERE id = ?',
     consultable: 'SELECT producto.id AS producto_id, producto.name AS producto_name, producto.price AS price, producto.description AS description, imagen.url AS imagen_url, category.name AS category_name FROM category INNER JOIN producto ON category.id = producto.category_id INNER JOIN imagen ON imagen.id = producto.id',
-    getdetalles: 'SELECT producto.id AS producto_id, producto.name AS producto_name, producto.code AS producto_code, producto.price AS price, producto.description AS description, category.name AS category_name, producto.brand AS brand, producto.model AS model, imagen.url AS imagen_url FROM producto INNER JOIN category ON category.id = producto.category_id INNER JOIN imagen ON imagen.id = producto.id'
-
+    getdetalles: 'SELECT producto.id AS producto_id, producto.name AS producto_name, producto.code AS producto_code, producto.price AS price, producto.description AS description, category.name AS category_name, producto.brand AS brand, producto.model AS model, imagen.url AS imagen_url, imagen.id AS imagen_id FROM producto INNER JOIN category ON category.id = producto.category_id INNER JOIN imagen ON imagen.id = producto.id',
+    getcompra: 'SELECT * FROM compras'
+    
 }
 module.exports = {
 
 
+
+
+    facturas(cantidad, total_pagado, fecha, ip_cliente, transaccion_id, descripcion, referencia, moneda_id, cliente_id, producto_id){
+        return new Promise ((resolve, reject)=>{
+            const sql= 'INSERT INTO compras (cantidad, total_pagado, fecha, ip_cliente, transaccion_id, descripcion, referencia, moneda_id, cliente_id, producto_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            db.run(sql, [cantidad, total_pagado, fecha, ip_cliente, transaccion_id, descripcion, referencia, moneda_id, cliente_id, producto_id], (err, resultados)=>{
+                if (err) reject(err);
+                else resolve (resultados);
+            });
+        })
+    },
+
+    insertcompra(cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente){
+        return new Promise((resolve, reject) => {
+            db.run(querys.insertcompra, [cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente], (err) => {
+                if(err) reject(err);
+                    resolve()
+            })
+        })
+    
+    },
+
+    getcompra(){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getcompra, (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+    },
+    getuser(){
+        return new Promise((resolve, reject)=>{
+            db.all(querys.getuser, (err,rows)=>{
+                if(err) reject(err);
+                resolve(rows);
+            })
+        })
+
+    
+    },
+
+    register(name, email, password){
+        return new Promise((resolve, reject) => {
+            db.run(querys.register, [name, email, password], (err) => {
+                if(err) reject(err);
+                    resolve()
+            })
+        })
+    },
 
     getproducto(){
         return new Promise((resolve, reject)=>{
@@ -232,3 +284,8 @@ module.exports = {
         });
     }
 }
+
+
+
+
+

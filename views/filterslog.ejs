@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listado de Productos</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/stylecuadricula.css">
+</head>
+<body>
+  <form action="/filterslog" method="get">
+    <input type="text" name="producto_name" placeholder="Nombre del producto">
+    <input type="text" name="description" placeholder="Descripción del producto">
+    <select name="category_name">
+      <option value=""> Todas las Categorias</option>
+      <option value="Gamer">Gamer</option>
+      <option value="Oficina">Oficina</option>
+      <input type="text" name="brand" placeholder="Modelo">
+      <input type="text" name="model" placeholder="Marca">
+    </select>
+    <input type="submit" value="Aplicar filtros">
+  </form>
+</body>
+</html>

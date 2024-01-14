@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listado de Productos</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/stylecuadricula.css">
+</head>
+<body>
+  <a class="button" href="/">Salir</a>
+  <h1 class="my-title">Listado de Productos</h1>
+
+
+  <div class="filterslog">
+    <%- include('./filterslog') -%>
+  </div>
+  <div class="product-grid">
+    <% producto.forEach(producto => { %>
+      <div class="product">
+        <a href="/payments" class="compra">Comprar ahora</a>
+        <h2><%= producto.producto_name %></h2>
+        <p>Precio: <%= producto.price %></p>
+        <p>Descripción: <%= producto.description %></p>
+        <p>Marca: <%= producto.brand %></p>
+        <p>Modelo: <%= producto.model %></p>
+
+        <% if (producto.imagen_url) { %>
+          <img alt="Producto image" src="<%= producto.imagen_url %>" width="200" height="150">
+        <% } else { %>
+          No hay imagen disponible
+        <% } %>
+        <a href="/detallesini/<%= producto.producto_id %>" class="button">Ver detalles del producto <%= producto.producto_name %></a>
+      </div>
+    <% }); %>
+  </div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/styleini.css">
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script>
+      function onSubmit(token) {
+        document.getElementById("demo-form").submit();
+      }
+    </script>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <title>Registrarse</title>
+</head>
+<body>
+
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+          <!-- Tabs Titles -->
+          <a class="inactive underlineHover" href="/userini"> Iniciar </a>
+          <h2  class="active" >Registrar </h2>
+      
+      
+          <!-- Login Form -->
+          <form action="/register" method="post">
+            <input type="text" id="name" class="fadeIn third" name="name" placeholder="Nombre" required>
+            <input type="email" id="email" class="fadeIn second" name="email" placeholder="Correo Electrónico" required>
+            <input type="password" id="password" class="fadeIn third" name="password" placeholder="Contraseña" required>
+            <input type="submit" class="fadeIn fourth" value="Registrar">
+            <div class="g-recaptcha" data-sitekey="6LdMME4pAAAAADjhHwZu9Lm8CoDQSqRL67Ln7ulk" ></div>
+            <div class="error-message">
+                <%= typeof error !== 'undefined' ? error : '' %>
+            </div>
+        </form>
+        </div>
+        <script>
+            function onRecaptchaSuccess() {
+                // Habilitar el botón después de que reCAPTCHA se haya completado correctamente
+                document.getElementById('submitButton').disabled = false;
+                
+            }
+    
+            function validateForm() {
+                // Verificar que las contraseñas coincidan
+                var password = document.getElementById('password').value;
+                var confirmPassword = document.getElementById('confirmPassword').value;
+    
+                if (password !== confirmPassword) {
+                    document.getElementById('passwordError').innerHTML = 'Las contraseñas no coinciden.';
+                    return false;
+                } else {
+                    document.getElementById('passwordError').innerHTML = '';
+                    return true;
+                }
+            }
+            var errorMessage = '<%= typeof error !== "undefined" ? error : "" %>';
+            if (errorMessage.includes('El correo electrónico ya está registrado, INGRESE OTRO')) {
+                alert('El correo electrónico ya está registrado. Por favor, ingrese otro.');
+            }
+        </script>
+      
+      
+        </div>
+      </div>
+    
+</body>
+</html>

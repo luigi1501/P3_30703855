@@ -18,7 +18,7 @@
   <div class="product-grid">
     <% producto.forEach(producto => { %>
       <div class="product">
-        <a href="/payments" class="compra">Comprar ahora</a>
+        <a href="/payments/<%= producto.producto_name %>/<%= producto.producto_id %>" class="compra">Comprar ahora</a>
         <h2><%= producto.producto_name %></h2>
         <p>Precio: <%= producto.price %></p>
         <p>Descripción: <%= producto.description %></p>

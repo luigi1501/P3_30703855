@@ -17,42 +17,57 @@
   <div class="container-contacto">
   
 
-  <form action="/paga" id="form" method="post">
+  <form action="/payments/<%= producto %>/<%= id %>" id="form" method="post">
     <h2>Pagar</h2>
+    <h2><%= producto %></h2>
     <br>
 
     <label for="full-name">Nombre completo</label>
-    <input type="text" placeholder="Nombre" name="full-name" value="" required>
+    <input type="text" placeholder="Nombre" name="full_name" value="" required>
+
+    <br>
+
+    <label for="full_name">Correo electrónico</label>
+    <input type="email" placeholder="Correo" name="email" value="" required>
 
     <br>
     
-    <label for="card-number">Numero de tarjeta</label>
-    <input type="text" placeholder="tarjeta" name="card-number" value="" required>
+    <label for="card_number">Numero de tarjeta</label>
+    <input type="number" placeholder="tarjeta" name="card_number" value="" required>
 
     <br>
 
-    <label for="expiration-month">Mes de expiracion</label>
-    <input type="text" placeholder="Mes" name="expiration-month" value="" required>
+    <label for="expiration_month">Mes de expiracion</label>
+    <input type="number" placeholder="Mes" name="expiration_month" value="" required>
 
     <br>
    
-    <label for="expiration-year">Año de expiracion</label>
-    <input type="text" placeholder="Año" name="expiration-year" value="" required>
+    <label for="expiration_year">Año de expiracion</label>
+    <input type="number" placeholder="Año" name="expiration_year" value="" required>
 
     <br>
     
-    <label for="cvv">Cedula</label>
-    <input type="text" placeholder="Cedula" name="cvv" value="" required>
+    <label for="cvv">Cvv</label>
+    <input type="number" placeholder="cvv" name="cvv" value="" required>
 
     <br>
 
     <label for="amount">Monto a Pagar</label>
-    <input type="text" placeholder="Monto" name="amount" value="" required>
+    <input type="number" placeholder="Monto" name="amount" value="<%= monto %>" disabled required>
    
     <br>
-    <label for="currency">Indique la moneda</label>
-    <input type="text" placeholder="moneda" name="currency" value="" required>
 
+    <label for="amount">Cantidad</label>
+    <input type="number" placeholder="Cantidad" name="count" value="1" required>
+   
+    <br>
+
+    <label for="currency">Indique la moneda</label>
+    <select name="currency" required>
+      <option value="USD">USD</option>
+      <option value="EUR">EUR</option>
+      <option value="VES">VES</option>
+    </select>
     <br>
 
     <label for="description">Descripcion</label>

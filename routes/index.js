@@ -11,7 +11,7 @@ const nodemailer = require('nodemailer');
 let logged = false;
 let logeedin = false;
 let error_recaptcha = "";
-/*
+
 //Pago productos API 
 router.post('/payments', async (req, res, next)=>{
   var monto, moneda;
@@ -62,7 +62,7 @@ router.post('/payments', async (req, res, next)=>{
     res.render('pagofails');
   }
 })
-*/
+
 // compra
 router.get('/compra', (req, res) => {
   db.getproducto()
@@ -103,7 +103,7 @@ router.get('/pedidoprd/:id', function(req, res, next){
 
 
 router.post('/payments/:producto/:id', async (req, res, next) =>{
-  /*let date = new Date();
+  let date = new Date();
   let Datetime = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
   let fecha = Datetime;
   let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -123,7 +123,7 @@ router.post('/payments/:producto/:id', async (req, res, next) =>{
     console.log(`El precio del producto ${producto_id} es: ${precio}`);
    
     let total_pagado = precio * cantidad;
-    console.log(`El resultado de la multiplicación es: ${total_pagado}`); */
+    console.log(`El resultado de la multiplicación es: ${total_pagado}`); 
 
     const { producto, id } = req.params;
     const { full_name, email, card_number, expiration_month, expiration_year, cvv, currency, amount, count, description } = req.body;

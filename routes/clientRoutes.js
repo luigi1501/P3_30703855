@@ -21,7 +21,8 @@ router.get('/detallesini/:id', catalogController.getProductDetails);
 router.get('/filters', (req, res) => res.render('filters'));
 router.get('/filterslog', catalogController.getLoggedCatalog);
 
-// ================= API BÚSQUEDA EN TIEMPO REAL (JSON) ================= //
+// ================= API BÚSQUEDA EN TIEMPO REAL & HEALTHCHECK ================= //
+router.get('/ping', (req, res) => res.status(200).send('pong'));
 router.get('/api/search', catalogController.searchJSON);
 
 // ================= AUTENTICACIÓN CLIENTE ================= //

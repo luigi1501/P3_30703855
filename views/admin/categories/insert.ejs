@@ -1,0 +1,27 @@
+<%- include('../../partials/header', { title: 'Nueva Categoría | Admin' }) %>
+<%- include('../../partials/navbar') %>
+
+<div class="admin-container">
+    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+        <a href="/tabcategory" class="btn-secondary-sm"><i class="fa-solid fa-arrow-left"></i> Volver a Categorías</a>
+        <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800; margin: 0;">Agregar Nueva Categoría</h1>
+    </div>
+
+    <div style="max-width: 600px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem;">
+        <form action="/insertcat" method="POST">
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="name" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-color);">Nombre de la Categoría</label>
+                <input type="text" id="name" name="name" class="form-input" placeholder="Ej: Teclados Mecánicos, Keycaps, Switches" required style="width: 100%; padding: 0.75rem 1rem; background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; color: #fff;">
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button type="submit" class="btn-primary-sm" style="padding: 0.75rem 1.5rem; font-size: 1rem;">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar Categoría
+                </button>
+                <a href="/tabcategory" class="btn-secondary-sm" style="padding: 0.75rem 1.5rem; font-size: 1rem;">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %>

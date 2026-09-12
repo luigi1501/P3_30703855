@@ -1,0 +1,54 @@
+<nav class="navbar-glass">
+    <div class="nav-container">
+        <a href="/" class="nav-brand">
+            <i class="fa-solid fa-keyboard brand-icon"></i>
+            <span>Keyboards<span class="brand-highlight">Store</span></span>
+        </a>
+
+        <!-- Botón Hamburguesa (solo móvil) -->
+        <button class="nav-hamburger" id="navHamburger" aria-label="Menú" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="nav-links" id="navLinks">
+            <a href="/" class="nav-link"><i class="fa-solid fa-house"></i> Catálogo</a>
+            <% if (user) { %>
+                <a href="/pageini" class="nav-link"><i class="fa-solid fa-grid-2"></i> Mis Productos</a>
+                <% if (user.role === 'admin' || isAdmin) { %>
+                    <a href="/administrar" class="nav-link badge-admin"><i class="fa-solid fa-shield-halved"></i> Dashboard Admin</a>
+                <% } %>
+                <div class="user-menu">
+                    <span class="user-badge"><i class="fa-solid fa-circle-user"></i> <%= user.name %></span>
+                    <a href="/logout" class="btn-logout" title="Cerrar Sesión"><i class="fa-solid fa-arrow-right-from-bracket"></i> Salir</a>
+                </div>
+            <% } else { %>
+                <a href="/userini" class="btn-secondary-sm"><i class="fa-solid fa-user"></i> Iniciar Sesión</a>
+                <a href="/register" class="btn-primary-sm"><i class="fa-solid fa-user-plus"></i> Registrarse</a>
+                <a href="/login" class="nav-link-admin"><i class="fa-solid fa-lock"></i> Admin</a>
+            <% } %>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // Hamburger Menu Toggle
+    const hamburger = document.getElementById('navHamburger');
+    const navLinks = document.getElementById('navLinks');
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            const isOpen = navLinks.classList.toggle('nav-open');
+            hamburger.classList.toggle('is-open', isOpen);
+            hamburger.setAttribute('aria-expanded', isOpen);
+        });
+        // Cierra al hacer clic en un enlace
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('nav-open');
+                hamburger.classList.remove('is-open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
+</script>

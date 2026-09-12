@@ -1,0 +1,51 @@
+<%- include('../../partials/header', { title: 'Gestión de Categorías | Admin' }) %>
+<%- include('../../partials/navbar') %>
+
+<div class="admin-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800;">Gestión de Categorías</h1>
+            <p style="color: var(--text-muted);">Total de registros: <%= category.length %></p>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <a href="/admin/dashboard" class="btn-secondary-sm"><i class="fa-solid fa-arrow-left"></i> Volver al Dashboard</a>
+            <a href="/insertcat" class="btn-primary-sm"><i class="fa-solid fa-plus"></i> Nueva Categoría</a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre de Categoría</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (category && category.length > 0) { %>
+                    <% category.forEach(item => { %>
+                        <tr>
+                            <td>#<%= item.id %></td>
+                            <td style="font-weight: 600; color: #fff;"><%= item.name %></td>
+                            <td>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <a href="/editcat/<%= item.id %>" class="btn-secondary-sm" style="padding: 0.35rem 0.65rem;" title="Editar"><i class="fa-solid fa-pen"></i></a>
+                                    <a href="/deletecat/<%= item.id %>" class="btn-logout" style="padding: 0.35rem 0.65rem;" onclick="return confirm('¿Estás seguro de eliminar esta categoría?');" title="Eliminar"><i class="fa-solid fa-trash"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="3" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                            No hay categorías registradas en el sistema.
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %>

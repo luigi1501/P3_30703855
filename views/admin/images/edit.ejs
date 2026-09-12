@@ -1,0 +1,137 @@
+<%- include('../../partials/header', { title: 'Editar Imagen | Admin' }) %>
+<%- include('../../partials/navbar') %>
+
+<div class="admin-container">
+    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+        <a href="/admin/images" class="btn-secondary-sm"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+        <div>
+            <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.8rem; font-weight: 800;">Editar Imagen #<%= imagen.id %></h1>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Reemplaza el archivo o actualiza la URL</p>
+        </div>
+    </div>
+
+    <!-- Preview actual -->
+    <div style="max-width: 680px; margin-bottom: 1.75rem; padding: 1rem; background: rgba(15,23,42,0.5); border: 1px solid var(--border-glass); border-radius: var(--radius-md); display: flex; align-items: center; gap: 1.25rem;">
+        <img src="<%= imagen.url %>" alt="Actual" style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0;" onerror="this.src='https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=200'">
+        <div>
+            <p style="font-weight: 700; color: #fff; margin-bottom: 0.25rem;">Imagen actual</p>
+            <p style="color: var(--text-muted); font-size: 0.82rem; word-break: break-all;"><%= imagen.url %></p>
+        </div>
+    </div>
+
+    <form action="/admin/images/edit" method="POST" enctype="multipart/form-data" style="max-width: 680px;">
+        <input type="hidden" name="id" value="<%= imagen.id %>">
+
+        <!-- Cloudinary Status -->
+        <% if (cloudinaryConfigured) { %>
+        <div class="upload-zone" id="uploadZone" style="margin-bottom: 1.25rem;">
+            <input type="file" id="imagenFile" name="imagen_file" accept="image/jpeg,image/png,image/webp,image/gif" style="display: none;">
+            <div id="uploadContent">
+                <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;"></i>
+                <p style="font-weight: 700; color: #fff; margin-bottom: 0.25rem; font-size: 0.95rem;">Reemplazar con nuevo archivo</p>
+                <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 0.75rem;">Arrastra o haz clic para elegir</p>
+                <button type="button" class="btn-secondary-sm" style="font-size: 0.85rem;" onclick="document.getElementById('imagenFile').click()">
+                    <i class="fa-solid fa-folder-open"></i> Elegir archivo
+                </button>
+            </div>
+            <div id="uploadPreview" style="display: none;">
+                <img id="previewImg" src="" alt="Preview" style="max-height: 150px; border-radius: var(--radius-sm); object-fit: contain; margin-bottom: 0.5rem;">
+                <div style="display: flex; gap: 0.5rem; justify-content: center; align-items: center;">
+                    <span id="previewName" style="color: var(--text-muted); font-size: 0.82rem;"></span>
+                    <button type="button" class="btn-logout" onclick="clearPreview()" style="font-size: 0.78rem; padding: 0.2rem 0.5rem;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: 0.75rem 0 1.25rem; position: relative;">
+            <span style="background: var(--bg-card); padding: 0 1rem; position: relative; z-index: 1;">— o actualiza la URL —</span>
+            <hr style="position: absolute; top: 50%; left: 0; right: 0; border-color: var(--border-glass); margin: 0;">
+        </div>
+        <% } %>
+
+        <div class="input-group" style="margin-bottom: 1.25rem;">
+            <label for="url">URL de Imagen</label>
+            <input type="url" id="url" name="url" class="form-control" value="<%= imagen.url %>" placeholder="https://...">
+        </div>
+
+        <div class="input-group" style="margin-bottom: 1.25rem;">
+            <label for="producto_id">Producto</label>
+            <select id="producto_id" name="producto_id" class="form-control">
+                <% producto.forEach(p => { %>
+                    <option value="<%= p.id %>" <%= imagen.producto_id == p.id ? 'selected' : '' %>><%= p.name %> (ID: <%= p.id %>)</option>
+                <% }); %>
+            </select>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 2rem;">
+            <label for="destacado">Imagen Destacada</label>
+            <select id="destacado" name="destacado" class="form-control">
+                <option value="NO" <%= imagen.destacado === 'NO' ? 'selected' : '' %>>No</option>
+                <option value="SI" <%= imagen.destacado === 'SI' ? 'selected' : '' %>>Sí (imagen principal)</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-primary-sm btn-block" style="height: 48px; font-size: 1.05rem; justify-content: center;">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+        </button>
+    </form>
+</div>
+
+<script>
+    const zone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('imagenFile');
+
+    if (zone && fileInput) {
+        zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) setPreviewFile(file);
+        });
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files[0]) setPreviewFile(fileInput.files[0]);
+        });
+    }
+
+    function setPreviewFile(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById('previewImg').src = e.target.result;
+            document.getElementById('previewName').textContent = file.name;
+            document.getElementById('uploadContent').style.display = 'none';
+            document.getElementById('uploadPreview').style.display = 'block';
+            document.getElementById('url').value = '';
+        };
+        reader.readAsDataURL(file);
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        if (fileInput) fileInput.files = dt.files;
+    }
+
+    function clearPreview() {
+        document.getElementById('previewImg').src = '';
+        document.getElementById('previewName').textContent = '';
+        document.getElementById('uploadContent').style.display = 'block';
+        document.getElementById('uploadPreview').style.display = 'none';
+        if (fileInput) fileInput.value = '';
+    }
+</script>
+
+<style>
+.upload-zone {
+    border: 2px dashed var(--border-glass);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: rgba(15, 23, 42, 0.4);
+}
+.upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.08);
+}
+</style>
+
+<%- include('../../partials/footer') %>

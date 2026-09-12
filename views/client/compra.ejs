@@ -1,0 +1,90 @@
+<%- include('../partials/header', { title: 'Selección de Producto | Keyboards Store' }) %>
+<%- include('../partials/navbar') %>
+
+<main class="main-container">
+    <div class="auth-wrapper" style="max-width: 650px;">
+        <div class="auth-header">
+            <i class="fa-solid fa-cart-shopping brand-icon" style="font-size: 2.5rem; margin-bottom: 0.5rem; color: #38bdf8;"></i>
+            <h2>Procesar Pedido</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Selecciona el producto y cliente para continuar con la transacción</p>
+        </div>
+
+        <form action="/payments" method="POST" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div class="input-group">
+                <label for="producto_id">Producto a Comprar</label>
+                <select id="producto_id" name="producto_id" class="form-control" required>
+                    <option value="">Selecciona un producto</option>
+                    <% if (typeof producto !== 'undefined' && producto) { %>
+                        <% producto.forEach(item => { %>
+                            <option value="<%= item.id %>"><%= item.name %> - $<%= Number(item.price).toFixed(2) %></option>
+                        <% }); %>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="nombre">Nombre Completo del Comprador</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Juan Pérez" value="<%= typeof user !== 'undefined' && user ? user.name : '' %>" required>
+            </div>
+
+            <div class="input-group">
+                <label for="numero_tarjeta">Número de Tarjeta de Crédito</label>
+                <input type="text" id="numero_tarjeta" name="numero_tarjeta" class="form-control" placeholder="•••• •••• •••• ••••" maxlength="16" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="input-group">
+                    <label for="mes_ven">Mes Expiración</label>
+                    <select name="mes_ven" id="mes_ven" class="form-control">
+                        <% for (let m = 1; m <= 12; m++) { %>
+                            <option value="<%= m %>"><%= m < 10 ? '0' + m : m %></option>
+                        <% } %>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="year_ven">Año Expiración</label>
+                    <select name="year_ven" id="year_ven" class="form-control">
+                        <% for (let y = 2026; y <= 2035; y++) { %>
+                            <option value="<%= y %>"><%= y %></option>
+                        <% } %>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="input-group">
+                    <label for="cvv">Código CVC / CVV</label>
+                    <input type="password" name="cvv" id="cvv" class="form-control" placeholder="123" maxlength="4" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="moneda_id">Moneda</label>
+                    <select name="moneda_id" id="moneda_id" class="form-control">
+                        <option value="1">USD (Dólar USD)</option>
+                        <option value="2">EUR (Euros EUR)</option>
+                        <option value="3">VES (Bolívares VES)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="input-group">
+                    <label for="cantidad">Cantidad</label>
+                    <input type="number" name="cantidad" id="cantidad" class="form-control" value="1" min="1" max="10" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="precio">Precio Unitario ($)</label>
+                    <input type="number" step="0.01" name="precio" id="precio" class="form-control" placeholder="0.00" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary-sm btn-block" style="justify-content: center; height: 48px; font-size: 1.05rem;">
+                <i class="fa-solid fa-credit-card"></i> Pagar Ahora
+            </button>
+        </form>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

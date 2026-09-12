@@ -1,0 +1,205 @@
+<%- include('../partials/header', { title: 'Checkout & Pagos Multi-Moneda | Keyboards Store' }) %>
+<%- include('../partials/navbar') %>
+
+<main class="main-container">
+    <div class="auth-wrapper" style="max-width: 840px;">
+        <div class="auth-header">
+            <i class="fa-solid fa-shield-halved brand-icon" style="font-size: 2.5rem; margin-bottom: 0.5rem; color: #10b981;"></i>
+            <h2>Pasarela de Pago Segura</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Aceptamos Tarjetas Bancarias (Visa, Mastercard, Amex) y Criptomonedas (USDT, BTC, Binance Pay)</p>
+        </div>
+
+        <!-- Payment Method Tabs -->
+        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-glass); padding-bottom: 1rem;" class="payment-tabs">
+            <button type="button" id="tabCard" class="btn-primary-sm" onclick="switchPaymentTab('card')" style="flex: 1; justify-content: center; height: 44px;">
+                <i class="fa-solid fa-credit-card"></i> Tarjeta / Banco
+            </button>
+            <button type="button" id="tabCrypto" class="btn-secondary-sm" onclick="switchPaymentTab('crypto')" style="flex: 1; justify-content: center; height: 44px;">
+                <i class="fa-brands fa-bitcoin"></i> Criptomonedas / Binance
+            </button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem; align-items: start;" class="checkout-grid">
+            <!-- Summary Box -->
+            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 1.25rem; text-align: center;">
+                <img src="<%= datos && datos.imagen_url ? datos.imagen_url : 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500' %>" alt="Producto" style="width: 100%; height: 160px; object-fit: cover; border-radius: var(--radius-sm); margin-bottom: 1rem;" onerror="this.src='https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500'">
+                <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.5rem;"><%= datos ? (datos.producto_name || datos.name) : 'Teclado Mecánico' %></h4>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.75rem;"><%= datos ? (datos.brand || 'Marca Standard') : '' %> - <%= datos ? (datos.model || '') : '' %></p>
+                <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.8rem; font-weight: 800; color: #38bdf8;">
+                    $<%= datos && datos.price ? Number(datos.price).toFixed(2) : '0.00' %>
+                </div>
+            </div>
+
+            <!-- Card Payment Form Section -->
+            <div id="cardSection">
+                <form action="/payments" method="POST" style="display: flex; flex-direction: column; gap: 1.1rem;">
+                    <input type="hidden" name="producto_id" value="<%= datos ? (datos.producto_id || datos.id) : 1 %>">
+                    
+                    <div class="input-group">
+                        <label for="descripcion">Detalle de transacción</label>
+                        <input type="text" name="descripcion" id="descripcion" class="form-control" value="Compra de: <%= datos ? (datos.producto_name || datos.name) : 'Producto' %>" readonly>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="nombre">Nombre del Tarjetahabiente</label>
+                        <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Juan Pérez" value="<%= typeof user !== 'undefined' && user ? user.name : '' %>" required>
+                    </div>
+
+                    <div class="input-group" style="position: relative;">
+                        <label for="numero_tarjeta">Número de Tarjeta (Débito/Crédito)</label>
+                        <div style="position: relative; width: 100%;">
+                            <input type="text" name="numero_tarjeta" id="numero_tarjeta" class="form-control" placeholder="4532 •••• •••• ••••" maxlength="19" oninput="detectCardBrand(this.value)" required>
+                            <div id="cardBrandBadge" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 1.5rem; color: var(--text-muted);">
+                                <i class="fa-solid fa-credit-card"></i>
+                            </div>
+                        </div>
+                        <small id="cardBrandText" style="font-size: 0.8rem; color: #38bdf8; margin-top: 4px; font-weight: 600;">Detectando tipo de tarjeta bancaria...</small>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="input-group">
+                            <label for="mes_ven">Mes Expiración</label>
+                            <select name="mes_ven" id="mes_ven" class="form-control">
+                                <% for (let m = 1; m <= 12; m++) { %>
+                                    <option value="<%= m %>"><%= m < 10 ? '0' + m : m %></option>
+                                <% } %>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="year_ven">Año Expiración</label>
+                            <select name="year_ven" id="year_ven" class="form-control">
+                                <% for (let y = 2026; y <= 2035; y++) { %>
+                                    <option value="<%= y %>"><%= y %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="input-group">
+                            <label for="cvv">Código CVC / CVV</label>
+                            <input type="password" name="cvv" id="cvv" class="form-control" placeholder="123" maxlength="4" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="moneda_id">Moneda</label>
+                            <select name="moneda_id" id="moneda_id" class="form-control">
+                                <option value="1">USD (Dólar USD)</option>
+                                <option value="2">EUR (Euros EUR)</option>
+                                <option value="3">VES (Bolívares VES)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="input-group">
+                            <label for="cantidad">Cantidad</label>
+                            <select name="cantidad" id="cantidad" class="form-control">
+                                <% for (let c = 1; c <= 10; c++) { %>
+                                    <option value="<%= c %>"><%= c %> unidad<%= c > 1 ? 'es' : '' %></option>
+                                <% } %>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="precio">Precio Unitario ($)</label>
+                            <input type="number" name="precio" id="precio" class="form-control" value="<%= datos ? datos.price : 0 %>" readonly>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary-sm btn-block" style="justify-content: center; height: 48px; font-size: 1.05rem; margin-top: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                        <i class="fa-solid fa-lock"></i> Pagar con Tarjeta Bancaria
+                    </button>
+                </form>
+            </div>
+
+            <!-- Crypto Payment Section -->
+            <div id="cryptoSection" style="display: none; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 1.5rem; text-align: center;">
+                <i class="fa-brands fa-bitcoin" style="font-size: 3rem; color: #f59e0b; margin-bottom: 0.75rem;"></i>
+                <h3 style="color: #fff; margin-bottom: 0.5rem;">Pago con Criptomonedas</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Escanea el código QR o envía a la billetera USDT / Binance Pay para procesar al instante.</p>
+
+                <div style="background: #0f172a; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass); margin-bottom: 1.25rem;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=usdt_trc20_keyboards_store_wallet_hash_2026" alt="Binance Pay QR" style="border-radius: 8px; margin-bottom: 0.75rem;">
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem;">Red USDT (TRC-20):</div>
+                    <code style="color: #38bdf8; font-size: 0.85rem; word-break: break-all;">TY67xK9sW8qZp3M...kL9vB2n1</code>
+                </div>
+
+                <form action="/payments" method="POST">
+                    <input type="hidden" name="producto_id" value="<%= datos ? (datos.producto_id || datos.id) : 1 %>">
+                    <input type="hidden" name="descripcion" value="Pago Crypto USDT: <%= datos ? datos.producto_name : 'Producto' %>">
+                    <input type="hidden" name="nombre" value="<%= typeof user !== 'undefined' && user ? user.name : 'Crypto User' %>">
+                    <input type="hidden" name="numero_tarjeta" value="4532000000000000">
+                    <input type="hidden" name="cvv" value="123">
+                    <input type="hidden" name="mes_ven" value="12">
+                    <input type="hidden" name="year_ven" value="2028">
+                    <input type="hidden" name="moneda_id" value="1">
+                    <input type="hidden" name="cantidad" value="1">
+                    <input type="hidden" name="precio" value="<%= datos ? datos.price : 0 %>">
+
+                    <button type="submit" class="btn-primary-sm btn-block" style="justify-content: center; height: 48px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                        <i class="fa-solid fa-check-circle"></i> Confirmar Pago Cripto / Binance
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Detector de Tarjetas Bancarias en Tiempo Real
+    function detectCardBrand(value) {
+        const cleaned = value.replace(/\D/g, '');
+        const badge = document.getElementById('cardBrandBadge');
+        const brandText = document.getElementById('cardBrandText');
+
+        if (cleaned.startsWith('4')) {
+            badge.innerHTML = '<i class="fa-brands fa-cc-visa" style="color: #38bdf8;"></i>';
+            brandText.innerText = 'Tarjeta detectada: VISA Bancaria';
+            brandText.style.color = '#38bdf8';
+        } else if (/^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[0-1]|2720)/.test(cleaned)) {
+            badge.innerHTML = '<i class="fa-brands fa-cc-mastercard" style="color: #f87171;"></i>';
+            brandText.innerText = 'Tarjeta detectada: MASTERCARD Bancaria';
+            brandText.style.color = '#f87171';
+        } else if (/^3[47]/.test(cleaned)) {
+            badge.innerHTML = '<i class="fa-brands fa-cc-amex" style="color: #34d399;"></i>';
+            brandText.innerText = 'Tarjeta detectada: AMERICAN EXPRESS';
+            brandText.style.color = '#34d399';
+        } else if (/^6(?:011|5)/.test(cleaned)) {
+            badge.innerHTML = '<i class="fa-brands fa-cc-discover" style="color: #fbbf24;"></i>';
+            brandText.innerText = 'Tarjeta detectada: DISCOVER Network';
+            brandText.style.color = '#fbbf24';
+        } else if (cleaned.length > 0) {
+            badge.innerHTML = '<i class="fa-solid fa-credit-card" style="color: var(--primary);"></i>';
+            brandText.innerText = 'Tarjeta Bancaria Estándar / Débito';
+            brandText.style.color = 'var(--text-muted)';
+        } else {
+            badge.innerHTML = '<i class="fa-solid fa-credit-card"></i>';
+            brandText.innerText = 'Ingresa los dígitos de tu tarjeta...';
+            brandText.style.color = 'var(--text-muted)';
+        }
+    }
+
+    // Alternar Pestañas de Pago
+    function switchPaymentTab(type) {
+        const cardTab = document.getElementById('tabCard');
+        const cryptoTab = document.getElementById('tabCrypto');
+        const cardSection = document.getElementById('cardSection');
+        const cryptoSection = document.getElementById('cryptoSection');
+
+        if (type === 'card') {
+            cardTab.className = 'btn-primary-sm';
+            cryptoTab.className = 'btn-secondary-sm';
+            cardSection.style.display = 'block';
+            cryptoSection.style.display = 'none';
+        } else {
+            cryptoTab.className = 'btn-primary-sm';
+            cardTab.className = 'btn-secondary-sm';
+            cardSection.style.display = 'none';
+            cryptoSection.style.display = 'block';
+        }
+    }
+</script>
+
+<%- include('../partials/footer') %>

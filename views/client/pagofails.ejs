@@ -1,0 +1,19 @@
+<%- include('../partials/header', { title: 'Error en Pago | Keyboards Store' }) %>
+<%- include('../partials/navbar') %>
+
+<main class="main-container">
+    <div class="auth-wrapper" style="max-width: 550px; text-align: center;">
+        <i class="fa-solid fa-circle-xmark" style="font-size: 4rem; color: #ef4444; margin-bottom: 1rem;"></i>
+        <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">No se pudo completar el pago</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.6;">
+            Lo sentimos, tu transacción no pudo ser procesada por la pasarela de pagos. Por favor verifica los datos de tu tarjeta o intenta con otro medio de pago.
+        </p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="/" class="btn-primary-sm" style="padding: 0.75rem 1.5rem;"><i class="fa-solid fa-house"></i> Volver al Catálogo</a>
+            <a href="/compra" class="btn-secondary-sm" style="padding: 0.75rem 1.5rem;"><i class="fa-solid fa-rotate-left"></i> Reintentar Pago</a>
+        </div>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

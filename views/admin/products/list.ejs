@@ -1,0 +1,61 @@
+<%- include('../../partials/header', { title: 'Gestión de Productos | Admin' }) %>
+<%- include('../../partials/navbar') %>
+
+<div class="admin-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800;">Catálogo de Productos</h1>
+            <p style="color: var(--text-muted);">Total de registros: <%= producto.length %></p>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <a href="/admin/dashboard" class="btn-secondary-sm"><i class="fa-solid fa-arrow-left"></i> Volver al Dashboard</a>
+            <a href="/insert" class="btn-primary-sm"><i class="fa-solid fa-plus"></i> Nuevo Producto</a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (producto && producto.length > 0) { %>
+                    <% producto.forEach(item => { %>
+                        <tr>
+                            <td>#<%= item.id %></td>
+                            <td><code><%= item.code %></code></td>
+                            <td style="font-weight: 600; color: #fff;"><%= item.name %></td>
+                            <td><%= item.brand %></td>
+                            <td><%= item.model %></td>
+                            <td style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-muted);"><%= item.description %></td>
+                            <td style="color: #38bdf8; font-weight: 700;">$<%= Number(item.price).toFixed(2) %></td>
+                            <td>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <a href="/edit/<%= item.id %>" class="btn-secondary-sm" style="padding: 0.35rem 0.65rem;" title="Editar"><i class="fa-solid fa-pen"></i></a>
+                                    <a href="/delete/<%= item.id %>" class="btn-logout" style="padding: 0.35rem 0.65rem;" onclick="return confirm('¿Estás seguro de eliminar este producto?');" title="Eliminar"><i class="fa-solid fa-trash"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                            No hay productos registrados en el sistema.
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %>

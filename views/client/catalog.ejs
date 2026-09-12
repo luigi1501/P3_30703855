@@ -1,0 +1,287 @@
+<%- include('../partials/header', { title: 'Catálogo de Teclados | Keyboards Store' }) %>
+<%- include('../partials/navbar') %>
+
+<section class="hero-section">
+    <h1 class="hero-title">Teclados Mecánicos &<br><span class="brand-highlight">Accesorios Custom</span></h1>
+    <p class="hero-subtitle">Descubre switches premium, keycaps personalizados y los mejores teclados gaming con envío rápido y garantía total.</p>
+
+    <!-- Filtrado Largo Horizontal con búsqueda en tiempo real -->
+    <div class="filter-card">
+        <div class="filter-form" id="filterForm">
+            <div class="input-group flex-2">
+                <label for="s_nombre">Nombre del Producto</label>
+                <div class="search-input-wrapper">
+                    <input type="text" id="s_nombre" class="form-control" placeholder="Buscar por teclado, switches..." autocomplete="off"
+                        value="<%= typeof query !== 'undefined' && query.producto_name ? query.producto_name : '' %>">
+                    <span class="search-live-icon" id="searchIcon">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="input-group flex-1">
+                <label for="s_marca">Marca</label>
+                <input type="text" id="s_marca" class="form-control" placeholder="Ej. Razer, Keychron" autocomplete="off"
+                    value="<%= typeof query !== 'undefined' && query.brand ? query.brand : '' %>">
+            </div>
+            <div class="input-group flex-1">
+                <label for="s_modelo">Modelo</label>
+                <input type="text" id="s_modelo" class="form-control" placeholder="Ej. K2-V2, Pro" autocomplete="off"
+                    value="<%= typeof query !== 'undefined' && query.model ? query.model : '' %>">
+            </div>
+            <button type="button" class="btn-primary-sm btn-filter-submit" onclick="triggerSearch()">
+                <i class="fa-solid fa-magnifying-glass"></i> Buscar
+            </button>
+        </div>
+        <!-- Indicador tiempo real -->
+        <div id="searchStatus" class="search-status" style="display: none;">
+            <span class="pulse-dot"></span>
+            <span id="searchStatusText">Buscando...</span>
+        </div>
+    </div>
+</section>
+
+<main class="main-container">
+    <!-- Contador de resultados -->
+    <div class="results-header" id="resultsHeader" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+        <span class="results-count" id="resultsCount"><%= producto && producto.length > 0 ? producto.length : 0 %> producto<%= producto && producto.length !== 1 ? 's' : '' %></span>
+        <span style="color: var(--text-muted); font-size: 0.85rem;" id="resultsLabel">encontrados en el catálogo</span>
+    </div>
+
+    <!-- Grid de Productos (actualizado dinámicamente) -->
+    <div class="product-grid" id="productGrid">
+        <% if (producto && producto.length > 0) { %>
+            <% producto.forEach(item => { %>
+                <%- include('../partials/productCard', { item, user: typeof user !== 'undefined' ? user : null }) %>
+            <% }); %>
+        <% } else { %>
+            <div class="empty-state" id="emptyState">
+                <i class="fa-solid fa-keyboard"></i>
+                <h3>No se encontraron productos</h3>
+                <p>Intenta cambiar los términos de búsqueda o filtros.</p>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+<!-- Mercado Libre Style Interactive Modal -->
+<div id="mlProductModal" class="modal-overlay">
+    <div class="modal-container">
+        <button type="button" class="modal-close-btn" onclick="closeProductModal()">&times;</button>
+        
+        <div class="modal-gallery">
+            <img id="mImg" class="modal-main-img" src="" alt="Producto">
+            <div class="shipping-badge">
+                <i class="fa-solid fa-truck-fast"></i> Envío gratis a todo el país
+            </div>
+        </div>
+
+        <div class="modal-details">
+            <div class="modal-subtitle">
+                <span class="badge-condition">Nuevo</span> | <span id="mCat">Categoría</span>
+            </div>
+            
+            <h2 id="mTitle" class="modal-title">Título del Producto</h2>
+            
+            <div class="modal-rating">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half-stroke"></i>
+                <span style="color: var(--text-muted); font-size: 0.85rem;">4.8 (124 opiniones)</span>
+            </div>
+
+            <div class="modal-price-box">
+                <div id="mPrice" class="modal-price-val">$0.00</div>
+                <div class="modal-installments">
+                    <i class="fa-solid fa-credit-card"></i> en 12x de $<span id="mInstallment">0.00</span> sin interés
+                </div>
+            </div>
+
+            <div class="modal-info-grid">
+                <div class="modal-info-item">
+                    <span>Marca:</span>
+                    <strong id="mBrand">-</strong>
+                </div>
+                <div class="modal-info-item">
+                    <span>Modelo:</span>
+                    <strong id="mModel">-</strong>
+                </div>
+                <div class="modal-info-item">
+                    <span>Código:</span>
+                    <strong id="mCode">-</strong>
+                </div>
+                <div class="modal-info-item">
+                    <span>Garantía:</span>
+                    <strong>12 Meses Oficial</strong>
+                </div>
+            </div>
+
+            <div class="modal-description">
+                <h4 style="color: #fff; margin-bottom: 0.4rem; font-size: 0.95rem;">Descripción:</h4>
+                <p id="mDesc">Descripción detallada del producto...</p>
+            </div>
+
+            <div class="modal-actions">
+                <a id="mBuyBtn" href="/userini" class="btn-ml-buy">
+                    <i class="fa-solid fa-bolt"></i> Comprar ahora
+                </a>
+                <a id="mCartBtn" href="/userini" class="btn-ml-cart">
+                    <i class="fa-solid fa-cart-plus"></i> Agregar al carrito
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ===== CONFIGURACIÓN =====
+    const IS_LOGGED = <%= typeof user !== 'undefined' && user ? 'true' : 'false' %>;
+    const FALLBACK_IMG = 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500';
+    let searchDebounceTimer = null;
+
+    // ===== BÚSQUEDA EN TIEMPO REAL =====
+    function buildProductCardHTML(item) {
+        const buyUrl = IS_LOGGED ? '/pedidoprd/' + item.producto_id : '/userini';
+        const imgUrl = item.imagen_url || FALLBACK_IMG;
+        const price = Number(item.price || 0).toFixed(2);
+        const itemJSON = JSON.stringify(item).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+        return `
+            <div class="product-card">
+                <div class="card-img-wrapper" onclick='openProductModal(${JSON.stringify(item)})' style="cursor: pointer;">
+                    <span class="badge-cat">${item.category_name || 'General'}</span>
+                    <img src="${imgUrl}" alt="${item.producto_name || 'Producto'}" onerror="this.src='${FALLBACK_IMG}'">
+                </div>
+                <div class="card-content">
+                    <div>
+                        <h3 class="product-title" onclick='openProductModal(${JSON.stringify(item)})' style="cursor: pointer;" title="${item.producto_name || ''}">${item.producto_name || 'Producto'}</h3>
+                        <p class="product-brand"><i class="fa-solid fa-tag"></i> ${item.brand || 'Marca Standard'} - ${item.model || 'V1'}</p>
+                    </div>
+                    <div class="product-price">$${price}</div>
+                    <div class="card-actions">
+                        <a href="${buyUrl}" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Comprar</a>
+                        <button type="button" class="btn-details" onclick='openProductModal(${JSON.stringify(item)})' title="Ver detalles">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    function renderEmptyState(msg) {
+        return `<div class="empty-state" id="emptyState">
+            <i class="fa-solid fa-keyboard"></i>
+            <h3>${msg || 'No se encontraron productos'}</h3>
+            <p>Intenta cambiar los términos de búsqueda o filtros.</p>
+        </div>`;
+    }
+
+    function setSearchLoading(loading) {
+        const icon = document.getElementById('searchIcon');
+        const status = document.getElementById('searchStatus');
+        if (loading) {
+            icon.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="color: var(--primary);"></i>';
+            status.style.display = 'flex';
+            document.getElementById('searchStatusText').textContent = 'Buscando en tiempo real...';
+        } else {
+            icon.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>';
+            status.style.display = 'none';
+        }
+    }
+
+    async function performSearch() {
+        const nombre = document.getElementById('s_nombre').value.trim();
+        const marca = document.getElementById('s_marca').value.trim();
+        const modelo = document.getElementById('s_modelo').value.trim();
+
+        // Si todo está vacío, muestra status limpio
+        const params = new URLSearchParams();
+        if (nombre) params.set('producto_name', nombre);
+        if (marca) params.set('brand', marca);
+        if (modelo) params.set('model', modelo);
+
+        setSearchLoading(true);
+
+        try {
+            const res = await fetch('/api/search?' + params.toString());
+            const data = await res.json();
+            const grid = document.getElementById('productGrid');
+            const countEl = document.getElementById('resultsCount');
+            const labelEl = document.getElementById('resultsLabel');
+
+            if (data.success && data.productos.length > 0) {
+                grid.innerHTML = data.productos.map(buildProductCardHTML).join('');
+                countEl.textContent = data.count + ' producto' + (data.count !== 1 ? 's' : '');
+                labelEl.textContent = (nombre || marca || modelo) ? 'encontrados para tu búsqueda' : 'en el catálogo';
+            } else {
+                grid.innerHTML = renderEmptyState();
+                countEl.textContent = '0 productos';
+                labelEl.textContent = 'para esa búsqueda';
+            }
+        } catch (err) {
+            console.error('Error en búsqueda:', err);
+        } finally {
+            setSearchLoading(false);
+        }
+    }
+
+    function triggerSearch() {
+        clearTimeout(searchDebounceTimer);
+        performSearch();
+    }
+
+    // Debounce en cada input (350ms de espera)
+    ['s_nombre', 's_marca', 's_modelo'].forEach(id => {
+        document.getElementById(id).addEventListener('input', () => {
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(performSearch, 350);
+        });
+
+        // Enter también dispara
+        document.getElementById(id).addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                clearTimeout(searchDebounceTimer);
+                performSearch();
+            }
+        });
+    });
+
+    // ===== MODAL ESTILO MERCADO LIBRE =====
+    function openProductModal(item) {
+        document.getElementById('mImg').src = item.imagen_url || FALLBACK_IMG;
+        document.getElementById('mTitle').innerText = item.producto_name || 'Producto';
+        document.getElementById('mCat').innerText = item.category_name || 'General';
+        
+        const price = Number(item.price || 0);
+        document.getElementById('mPrice').innerText = '$' + price.toFixed(2);
+        document.getElementById('mInstallment').innerText = (price / 12).toFixed(2);
+        
+        document.getElementById('mBrand').innerText = item.brand || 'N/A';
+        document.getElementById('mModel').innerText = item.model || 'N/A';
+        document.getElementById('mCode').innerText = item.code || item.producto_id || 'N/A';
+        document.getElementById('mDesc').innerText = item.description || 'Sin descripción detallada disponible.';
+        
+        const targetUrl = IS_LOGGED ? '/pedidoprd/' + item.producto_id : '/userini';
+        document.getElementById('mBuyBtn').href = targetUrl;
+        document.getElementById('mCartBtn').href = targetUrl;
+
+        document.getElementById('mlProductModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeProductModal() {
+        document.getElementById('mlProductModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    document.getElementById('mlProductModal').addEventListener('click', function(e) {
+        if (e.target === this) closeProductModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeProductModal();
+    });
+</script>
+
+<%- include('../partials/footer') %>

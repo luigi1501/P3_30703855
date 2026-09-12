@@ -1,0 +1,65 @@
+<%- include('../../partials/header', { title: 'Editar Producto | Admin' }) %>
+<%- include('../../partials/navbar') %>
+
+<main class="main-container">
+    <div class="auth-wrapper" style="max-width: 600px;">
+        <div class="auth-header">
+            <i class="fa-solid fa-pen-to-square brand-icon" style="font-size: 2.5rem; margin-bottom: 0.5rem;"></i>
+            <h2>Editar Producto #<%= producto.id %></h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Modifica los campos del producto registrado</p>
+        </div>
+
+        <form action="/admin/products/edit" method="POST" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <input type="hidden" name="id" value="<%= producto.id %>">
+
+            <div class="input-group">
+                <label for="code">Código del Producto</label>
+                <input type="number" id="code" name="code" class="form-control" value="<%= producto.code %>" required>
+            </div>
+
+            <div class="input-group">
+                <label for="name">Nombre del Producto</label>
+                <input type="text" id="name" name="name" class="form-control" value="<%= producto.name %>" required>
+            </div>
+
+            <div class="input-group">
+                <label for="brand">Marca</label>
+                <input type="text" id="brand" name="brand" class="form-control" value="<%= producto.brand %>" required>
+            </div>
+
+            <div class="input-group">
+                <label for="model">Modelo</label>
+                <input type="text" id="model" name="model" class="form-control" value="<%= producto.model %>" required>
+            </div>
+
+            <div class="input-group">
+                <label for="category_id">Categoría</label>
+                <select id="category_id" name="category_id" class="form-control" required>
+                    <option value="">Selecciona una categoría</option>
+                    <% if (typeof category !== 'undefined' && category) { %>
+                        <% category.forEach(cat => { %>
+                            <option value="<%= cat.id %>" <%= cat.id == producto.category_id ? 'selected' : '' %>><%= cat.name %></option>
+                        <% }); %>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="price">Precio ($)</label>
+                <input type="number" step="0.01" id="price" name="price" class="form-control" value="<%= producto.price %>" required>
+            </div>
+
+            <div class="input-group">
+                <label for="description">Descripción Detallada</label>
+                <textarea id="description" name="description" class="form-control" rows="4" required><%= producto.description %></textarea>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <a href="/admin/products" class="btn-secondary-sm" style="flex: 1; justify-content: center;">Cancelar</a>
+                <button type="submit" class="btn-primary-sm" style="flex: 1; justify-content: center;"><i class="fa-solid fa-save"></i> Actualizar Producto</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<%- include('../../partials/footer') %>

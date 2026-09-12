@@ -1,0 +1,77 @@
+<%- include('../partials/header', { title: 'Dashboard Administrativo | Keyboards Store' }) %>
+<%- include('../partials/navbar') %>
+
+<div class="admin-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800;">Panel de Administración</h1>
+            <p style="color: var(--text-muted);">Gestión global de inventario, usuarios, categorías y ventas</p>
+        </div>
+        <a href="/admin/products" class="btn-primary-sm"><i class="fa-solid fa-list-check"></i> Ver Productos</a>
+    </div>
+
+    <!-- Metrics Stat Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-box"></i></div>
+            <div>
+                <div class="stat-number"><%= typeof totalProductos !== 'undefined' ? totalProductos : 0 %></div>
+                <div class="stat-label">Productos Activos</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="color: #38bdf8; background: rgba(56, 189, 248, 0.15);"><i class="fa-solid fa-layer-group"></i></div>
+            <div>
+                <div class="stat-number"><%= typeof totalCategorias !== 'undefined' ? totalCategorias : 0 %></div>
+                <div class="stat-label">Categorías</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="color: #10b981; background: rgba(16, 185, 129, 0.15);"><i class="fa-solid fa-users"></i></div>
+            <div>
+                <div class="stat-number"><%= typeof totalClientes !== 'undefined' ? totalClientes : 0 %></div>
+                <div class="stat-label">Clientes Registrados</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="color: #f59e0b; background: rgba(245, 158, 11, 0.15);"><i class="fa-solid fa-receipt"></i></div>
+            <div>
+                <div class="stat-number"><%= typeof totalCompras !== 'undefined' ? totalCompras : 0 %></div>
+                <div class="stat-label">Ventas / Pedidos</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Management Action Grid -->
+    <h2 style="font-size: 1.3rem; margin-bottom: 1rem; color: #fff;">Accesos Rápidos de Gestión</h2>
+    <div class="product-grid" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
+        <a href="/admin/products" class="product-card" style="padding: 1.5rem; text-align: center; gap: 1rem;">
+            <i class="fa-solid fa-keyboard" style="font-size: 2.5rem; color: var(--primary);"></i>
+            <h3 style="font-size: 1.1rem; color: #fff;">Gestionar Productos</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Crear, editar o eliminar productos del catálogo</p>
+        </a>
+
+        <a href="/admin/categories" class="product-card" style="padding: 1.5rem; text-align: center; gap: 1rem;">
+            <i class="fa-solid fa-tags" style="font-size: 2.5rem; color: #38bdf8;"></i>
+            <h3 style="font-size: 1.1rem; color: #fff;">Gestionar Categorías</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Organizar las categorías de teclados y accesorios</p>
+        </a>
+
+        <a href="/admin/images" class="product-card" style="padding: 1.5rem; text-align: center; gap: 1rem;">
+            <i class="fa-solid fa-image" style="font-size: 2.5rem; color: #c084fc;"></i>
+            <h3 style="font-size: 1.1rem; color: #fff;">Galería de Imágenes</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Asignar imágenes de alta resolución a productos</p>
+        </a>
+
+        <a href="/admin/clients" class="product-card" style="padding: 1.5rem; text-align: center; gap: 1rem;">
+            <i class="fa-solid fa-users-gear" style="font-size: 2.5rem; color: #10b981;"></i>
+            <h3 style="font-size: 1.1rem; color: #fff;">Lista de Clientes</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Consultar cuentas de usuario registradas</p>
+        </a>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

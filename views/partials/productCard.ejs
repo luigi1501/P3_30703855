@@ -1,0 +1,19 @@
+<div class="product-card">
+    <div class="card-img-wrapper" onclick="openProductModal(<%= JSON.stringify(item) %>)" style="cursor: pointer;">
+        <span class="badge-cat"><%= item.category_name || 'General' %></span>
+        <img src="<%= item.imagen_url %>" alt="<%= item.producto_name %>" onerror="this.src='https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500'">
+    </div>
+    <div class="card-content">
+        <div>
+            <h3 class="product-title" onclick="openProductModal(<%= JSON.stringify(item) %>)" style="cursor: pointer;" title="<%= item.producto_name %>"><%= item.producto_name %></h3>
+            <p class="product-brand"><i class="fa-solid fa-tag"></i> <%= item.brand || 'Marca Standard' %> - <%= item.model || 'V1' %></p>
+        </div>
+        <div class="product-price">$<%= Number(item.price).toFixed(2) %></div>
+        <div class="card-actions">
+            <a href="<%= typeof user !== 'undefined' && user ? '/pedidoprd/' + item.producto_id : '/userini' %>" class="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Comprar</a>
+            <button type="button" class="btn-details" onclick="openProductModal(<%= JSON.stringify(item) %>)" title="Ver detalles estilo Mercado Libre">
+                <i class="fa-solid fa-eye"></i>
+            </button>
+        </div>
+    </div>
+</div>

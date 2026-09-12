@@ -1,0 +1,313 @@
+<footer class="footer-modern">
+    <div class="footer-container">
+        <div class="footer-col">
+            <div class="nav-brand">
+                <i class="fa-solid fa-keyboard brand-icon"></i>
+                <span>Keyboards<span class="brand-highlight">Store</span></span>
+            </div>
+            <p class="footer-text">La tienda líder en teclados mecánicos, custom switches y accesorios gaming de alta gama.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Navegación</h4>
+            <ul>
+                <li><a href="/">Catálogo</a></li>
+                <li><a href="/userini">Mi Cuenta</a></li>
+                <li><a href="/login">Acceso Administrativo</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Seguridad & Pagos</h4>
+            <div class="payment-badges">
+                <span><i class="fa-brands fa-cc-visa"></i> Visa</span>
+                <span><i class="fa-brands fa-cc-mastercard"></i> Mastercard</span>
+                <span><i class="fa-solid fa-lock"></i> SSL 256-bit</span>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; <%= new Date().getFullYear() %> Keyboards Store. Todos los derechos reservados. Desarrollado con Express, Node.js & SQLite.</p>
+    </div>
+</footer>
+
+<!-- ===== SPLASH SCREEN: Typewriter Loading ===== -->
+<div id="splashScreen" class="splash-screen" aria-hidden="true">
+    <div class="splash-content">
+        <!-- Ícono SVG del teclado mecánico animado -->
+        <div class="splash-icon">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="splash-key-svg">
+                <rect width="64" height="64" rx="12" fill="#6366f1"/>
+                <rect x="8" y="8" width="48" height="40" rx="7" fill="none" stroke="#fff" stroke-width="2.5"/>
+                <rect x="13" y="13" width="38" height="30" rx="5" fill="rgba(255,255,255,0.08)" stroke="#fff" stroke-width="1.5"/>
+                <text x="32" y="36" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="800" font-size="22" fill="#fff">K</text>
+                <path d="M18 50 Q22 56 32 57 Q42 56 46 50" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <!-- Brand -->
+        <div class="splash-brand">
+            Keyboards<span class="splash-brand-accent">Store</span>
+        </div>
+
+        <!-- Typewriter Text -->
+        <div class="splash-typewriter-wrapper">
+            <span class="splash-typewriter-text" id="splashTypeText"></span>
+            <span class="splash-cursor" id="splashCursor">|</span>
+        </div>
+
+        <!-- Barra de progreso -->
+        <div class="splash-progress-bar">
+            <div class="splash-progress-fill" id="splashProgress"></div>
+        </div>
+    </div>
+
+    <!-- Fondo: partículas de teclas -->
+    <div class="splash-particles" id="splashParticles"></div>
+</div>
+
+<style>
+/* ===== Splash Screen ===== */
+.splash-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image:
+        radial-gradient(at 20% 20%, rgba(99, 102, 241, 0.25) 0px, transparent 55%),
+        radial-gradient(at 80% 80%, rgba(139, 92, 246, 0.2) 0px, transparent 55%);
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.splash-screen.splash-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.splash-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    z-index: 1;
+}
+
+/* Ícono con efecto de tecla presionándose */
+.splash-icon {
+    position: relative;
+}
+
+.splash-key-svg {
+    width: 88px;
+    height: 88px;
+    border-radius: 16px;
+    box-shadow:
+        0 0 0 1px rgba(99,102,241,0.4),
+        0 8px 32px rgba(99,102,241,0.5),
+        0 0 60px rgba(99,102,241,0.2);
+    animation: splashKeyPressLoop 1.4s ease-in-out infinite;
+    transform-origin: center bottom;
+}
+
+@keyframes splashKeyPressLoop {
+    0%   { transform: translateY(0) scale(1);    box-shadow: 0 8px 32px rgba(99,102,241,0.5); }
+    40%  { transform: translateY(4px) scale(0.96); box-shadow: 0 3px 12px rgba(99,102,241,0.3); }
+    60%  { transform: translateY(4px) scale(0.96); box-shadow: 0 3px 12px rgba(99,102,241,0.3); }
+    100% { transform: translateY(0) scale(1);    box-shadow: 0 8px 32px rgba(99,102,241,0.5); }
+}
+
+/* Brand */
+.splash-brand {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+}
+
+.splash-brand-accent {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Typewriter */
+.splash-typewriter-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 2.2rem;
+}
+
+.splash-typewriter-text {
+    font-family: 'Plus Jakarta Sans', 'Courier New', monospace;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.splash-cursor {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: #6366f1;
+    animation: splashBlink 0.75s step-end infinite;
+    line-height: 1;
+    margin-top: -2px;
+}
+
+@keyframes splashBlink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+/* Barra de progreso */
+.splash-progress-bar {
+    width: 200px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.splash-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef);
+    border-radius: 99px;
+    transition: width 0.1s linear;
+}
+
+/* Partículas flotantes de teclas */
+.splash-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.splash-particle {
+    position: absolute;
+    font-family: 'Plus Jakarta Sans', monospace;
+    font-weight: 800;
+    color: rgba(99, 102, 241, 0.15);
+    animation: floatUp linear infinite;
+    user-select: none;
+    line-height: 1;
+    border: 1px solid rgba(99,102,241,0.08);
+    border-radius: 4px;
+    padding: 2px 6px;
+}
+
+@keyframes floatUp {
+    0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(-120px) rotate(15deg); opacity: 0; }
+}
+
+@media (max-width: 480px) {
+    .splash-key-svg  { width: 68px; height: 68px; }
+    .splash-brand    { font-size: 1.4rem; }
+    .splash-typewriter-text { font-size: 1.1rem; letter-spacing: 0.14em; }
+    .splash-progress-bar { width: 160px; }
+}
+</style>
+
+<script>
+(function () {
+    // ===== Teclas para partículas =====
+    const KEYS = ['Q','W','E','R','T','Y','A','S','D','F','G','Z','X','C','V','B','↵','⇧','⌫','K'];
+    const particleContainer = document.getElementById('splashParticles');
+
+    function createParticle() {
+        const p = document.createElement('span');
+        p.className = 'splash-particle';
+        p.textContent = KEYS[Math.floor(Math.random() * KEYS.length)];
+        const size = 12 + Math.random() * 10;
+        p.style.fontSize = size + 'px';
+        p.style.left = (Math.random() * 96) + '%';
+        const dur = 4 + Math.random() * 5;
+        p.style.animationDuration = dur + 's';
+        p.style.animationDelay = (Math.random() * dur) + 's';
+        particleContainer.appendChild(p);
+        // Limpia partículas antiguas
+        setTimeout(() => p.remove(), (dur + 2) * 1000);
+    }
+
+    // Genera partículas periódicamente
+    for (let i = 0; i < 12; i++) createParticle();
+    const particleInterval = setInterval(createParticle, 600);
+
+    // ===== Typewriter Effect =====
+    const TEXT = 'CARGANDO';
+    const textEl = document.getElementById('splashTypeText');
+    const progressEl = document.getElementById('splashProgress');
+    const splash = document.getElementById('splashScreen');
+
+    let charIndex = 0;
+    let phase = 'typing';   // 'typing' | 'waiting' | 'erasing' | 'done'
+    let typeTimer = null;
+
+    // Velocidades (ms)
+    const TYPE_SPEED   = 90;   // velocidad de escritura por letra
+    const ERASE_SPEED  = 55;   // velocidad de borrado
+    const WAIT_AFTER   = 600;  // pausa tras terminar de escribir
+    const WAIT_BEFORE_ERASE = 200;
+
+    function typeStep() {
+        if (phase === 'typing') {
+            if (charIndex <= TEXT.length) {
+                textEl.textContent = TEXT.slice(0, charIndex);
+                // Progreso: escritura ocupa el 50%
+                const pct = (charIndex / TEXT.length) * 50;
+                progressEl.style.width = pct + '%';
+                charIndex++;
+                typeTimer = setTimeout(typeStep, TYPE_SPEED);
+            } else {
+                phase = 'waiting';
+                typeTimer = setTimeout(typeStep, WAIT_AFTER);
+            }
+        } else if (phase === 'waiting') {
+            phase = 'erasing';
+            typeTimer = setTimeout(typeStep, WAIT_BEFORE_ERASE);
+        } else if (phase === 'erasing') {
+            if (charIndex > 0) {
+                charIndex--;
+                textEl.textContent = TEXT.slice(0, charIndex);
+                // Progreso: borrado avanza del 50% al 100%
+                const pct = 50 + ((TEXT.length - charIndex) / TEXT.length) * 50;
+                progressEl.style.width = pct + '%';
+                typeTimer = setTimeout(typeStep, ERASE_SPEED);
+            } else {
+                phase = 'done';
+                progressEl.style.width = '100%';
+                typeTimer = setTimeout(hideSplash, 250);
+            }
+        }
+    }
+
+    function hideSplash() {
+        clearInterval(particleInterval);
+        splash.classList.add('splash-hidden');
+        // Elimina del DOM tras la transición para no bloquear scroll/clicks
+        setTimeout(() => splash.remove(), 700);
+    }
+
+    // Inicia la animación al cargar
+    typeTimer = setTimeout(typeStep, 180);
+
+    // Seguro: si la página tarda más de 8s, desaparece de todas formas
+    setTimeout(() => {
+        clearTimeout(typeTimer);
+        hideSplash();
+    }, 8000);
+})();
+</script>
+
+</body>
+</html>

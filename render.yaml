@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: keyboards-store
+    env: node
+    plan: free
+    buildCommand: pnpm install
+    startCommand: pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DB_PATH
+        value: /var/data/database.sqlite
+      - key: PAYMENT_BEARER_TOKEN
+        sync: false   # Llenar manualmente en Render Dashboard
+      - key: PAYMENT_API_URL
+        value: https://fakepayment.onrender.com/payments
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false   # Llenar manualmente en Render Dashboard
+      - key: CLOUDINARY_API_KEY
+        sync: false   # Llenar manualmente en Render Dashboard
+      - key: CLOUDINARY_API_SECRET
+        sync: false   # Llenar manualmente en Render Dashboard
+      - key: ADMIN_USER
+        sync: false
+      - key: ADMIN_PASS
+        sync: false
+      - key: TURSO_DATABASE_URL
+        sync: false   # Llenar manualmente en Render Dashboard
+      - key: TURSO_AUTH_TOKEN
+        sync: false   # Llenar manualmente en Render Dashboard
+    disk:
+      name: sqlite-data
+      mountPath: /var/data
+      sizeGB: 1
+    healthCheckPath: /

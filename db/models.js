@@ -1,297 +1,350 @@
 const db = require('./connection');
 
-let querys = {
-    getuser:'SELECT * FROM usuarios',
-    getuserEmail:'SELECT * FROM usuarios WHERE email = ?',
-    register:'INSERT INTO usuarios(name, email, password) VALUES(?, ?, ?)',
+const querys = {
+    getuser: 'SELECT * FROM usuarios',
+    getuserEmail: 'SELECT * FROM usuarios WHERE email = ?',
+    getuserById: 'SELECT * FROM usuarios WHERE id = ?',
+    getuserByResetToken: 'SELECT * FROM usuarios WHERE resetToken = ?',
+    register: 'INSERT INTO usuarios(name, email, password, role) VALUES(?, ?, ?, ?)',
+    updatePassword: 'UPDATE usuarios SET password = ?, resetToken = NULL, resetTokenExpires = NULL WHERE id = ?',
+    setResetToken: 'UPDATE usuarios SET resetToken = ?, resetTokenExpires = ? WHERE email = ?',
+    
     getproducto: 'SELECT * FROM producto',
     getproductoID: 'SELECT * FROM producto WHERE id = ?',
-    getimagenID: 'SELECT * FROM imagen WHERE id = ?',
     insertproducto: 'INSERT INTO producto (code, name, brand, model, description, price, category_id) VALUES(?, ?, ?, ?, ?, ?, ?)',
+    updateproducto: 'UPDATE producto SET code = ?, name = ?, brand = ?, model = ?, description = ?, price = ?, category_id = ? WHERE id = ?',
+    deleteproducto: 'DELETE FROM producto WHERE id = ?',
+
     getimagen: 'SELECT * FROM imagen',
+    getimagenID: 'SELECT * FROM imagen WHERE id = ?',
+    insertimagen: 'INSERT INTO imagen (url, producto_id, destacado) VALUES(?, ?, ?)',
+    updateimagen: 'UPDATE imagen SET url = ?, producto_id = ?, destacado = ? WHERE id = ?',
+    deleteimagen: 'DELETE FROM imagen WHERE id = ?',
+
     getcategory: 'SELECT * FROM category',
     getcategoryID: 'SELECT * FROM category WHERE id = ?',
-    insertimagen: 'INSERT INTO imagen (url, producto_id, destacado) VALUES(?, ?, ?)',
     insertcategory: 'INSERT INTO category(name) VALUES(?)',
-    updateproducto: 'UPDATE producto SET code = ?, name = ?, brand = ?, model = ?, description = ?, price = ?, category_id = ? WHERE id = ?',
-    updateimagen: 'UPDATE imagen SET url = ?, producto_id = ?, destacado = ? WHERE id = ?',
     updatecategory: 'UPDATE category SET name = ? WHERE id = ?',
-    deleteproducto: 'DELETE FROM producto WHERE id = ?',
-    deleteimagen: 'DELETE FROM imagen WHERE id = ?',
     deletecategory: 'DELETE FROM category WHERE id = ?',
-    consultable: 'SELECT producto.id AS producto_id, producto.name AS producto_name, producto.price AS price, producto.description AS description, imagen.url AS imagen_url, category.name AS category_name FROM category INNER JOIN producto ON category.id = producto.category_id INNER JOIN imagen ON imagen.id = producto.id',
-    getdetalles: 'SELECT producto.id AS producto_id, producto.name AS producto_name, producto.code AS producto_code, producto.price AS price, producto.description AS description, category.name AS category_name, producto.brand AS brand, producto.model AS model, imagen.url AS imagen_url, imagen.id AS imagen_id FROM producto INNER JOIN category ON category.id = producto.category_id INNER JOIN imagen ON imagen.id = producto.id',
+
     getcompra: 'SELECT * FROM compra',
-    insertcompra: 'INSERT INTO compra(cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente) VALUES(?,?,?,?,?,?)'
-    
-}
+    insertcompra: 'INSERT INTO compra(cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente, transaccion_id, descripcion, referencia, moneda_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+};
+
 module.exports = {
-
-
-
-
-    facturas(cantidad, total_pagado, fecha, ip_cliente, transaccion_id, descripcion, referencia, moneda_id, cliente_id, producto_id){
-        return new Promise ((resolve, reject)=>{
-            const sql= 'INSERT INTO compras (cantidad, total_pagado, fecha, ip_cliente, transaccion_id, descripcion, referencia, moneda_id, cliente_id, producto_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-            db.run(sql, [cantidad, total_pagado, fecha, ip_cliente, transaccion_id, descripcion, referencia, moneda_id, cliente_id, producto_id], (err, resultados)=>{
+    facturas(cantidad, total_pagado, fecha, ip_cliente, transaccion_id, descripcion, referencia, moneda_id, cliente_id, producto_id) {
+        return new Promise((resolve, reject) => {
+            const sql = 'INSERT INTO compra (cantidad, total_pagado, fecha, ip_cliente, transaccion_id, descripcion, referencia, moneda_id, cliente_id, producto_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            db.run(sql, [cantidad, total_pagado, fecha, ip_cliente, transaccion_id, descripcion, referencia, moneda_id, cliente_id, producto_id], function(err) {
                 if (err) reject(err);
-                else resolve (resultados);
+                else resolve({ id: this.lastID });
             });
-        })
+        });
     },
 
-    insertcompra(cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente){
+    insertcompra(cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente, transaccion_id = '', descripcion = '', referencia = '', moneda_id = 1) {
         return new Promise((resolve, reject) => {
-            db.run(querys.insertcompra, [cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente], (err) => {
-                if(err) reject(err);
-                    resolve()
-            })
-        })
-    
+            db.run(querys.insertcompra, [cliente_id, producto_id, cantidad, total_pagado, fecha, ip_cliente, transaccion_id, descripcion, referencia, moneda_id], function(err) {
+                if (err) reject(err);
+                else resolve({ id: this.lastID });
+            });
+        });
     },
 
-    getcompra(){
-        return new Promise((resolve, reject)=>{
-            db.all(querys.getcompra, (err,rows)=>{
-                if(err) reject(err);
-                resolve(rows);
-            })
-        })
-    },
-    getuser(){
-        return new Promise((resolve, reject)=>{
-            db.all(querys.getuser, (err,rows)=>{
-                if(err) reject(err);
-                resolve(rows);
-            })
-        })
-
-    
-    },
-    getuserEmail(email){
-        return new Promise((resolve, reject)=>{
-            db.all(querys.getuserEmail, [email], (err,rows)=>{
-                if(err) reject(err);
-                console.log(rows);
-                resolve(rows);
-            })
-        })
-    },
-
-    register(name, email, password){
+    getcompra() {
         return new Promise((resolve, reject) => {
-            db.run(querys.register, [name, email, password], (err) => {
-                if(err) reject(err);
-                    resolve()
-            })
-        })
+            db.all(querys.getcompra, (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows || []);
+            });
+        });
     },
 
-    getproducto(){
-        return new Promise((resolve, reject)=>{
-            db.all(querys.getproducto, (err,rows)=>{
-                if(err) reject(err);
-                resolve(rows);
-            })
-        })
-
-    
-    },
-    
-    insertproducto(code, name, brand, model, description, price, category_id){
+    getuser() {
         return new Promise((resolve, reject) => {
-            db.run(querys.insertproducto, [code, name, brand, model, description, price, category_id], (err) => {
-                if(err) reject(err);
-                    resolve()
-            })
-        })
-    
+            db.all(querys.getuser, (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows || []);
+            });
+        });
     },
 
-    getproductoID(id){
-        return new Promise((resolve, reject)=>{
-            db.all(querys.getproductoID, [id], (err,rows)=>{
-                if(err) reject(err);
-                resolve(rows);
-            })
-        })
-    },
-
-    updateproducto(id, code, name, brand, model, description, price, category_id){
+    getuserEmail(email) {
         return new Promise((resolve, reject) => {
-            db.run(querys.updateproducto, [code, name, brand, model, description, price, category_id, id], (err) => {
-                if(err) reject(err);
-                resolve();
-            })
-        })
+            db.all(querys.getuserEmail, [email], (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows || []);
+            });
+        });
     },
 
-    deleteproducto(id){
+    getuserById(id) {
         return new Promise((resolve, reject) => {
-            db.run(querys.deleteproducto, [id], (err) => {
-                if(err) reject(err);
-                resolve();
-            })
-        })
+            db.get(querys.getuserById, [id], (err, row) => {
+                if (err) reject(err);
+                else resolve(row);
+            });
+        });
     },
-    getimagen(){
+
+    register(name, email, password, role = 'user') {
+        return new Promise((resolve, reject) => {
+            db.run(querys.register, [name, email, password, role], function(err) {
+                if (err) reject(err);
+                else resolve({ id: this.lastID });
+            });
+        });
+    },
+
+    setResetToken(email, token, expires) {
+        return new Promise((resolve, reject) => {
+            db.run(querys.setResetToken, [token, expires, email], function(err) {
+                if (err) reject(err);
+                else resolve({ changes: this.changes });
+            });
+        });
+    },
+
+    getuserByResetToken(token) {
+        return new Promise((resolve, reject) => {
+            db.get(querys.getuserByResetToken, [token], (err, row) => {
+                if (err) reject(err);
+                else resolve(row);
+            });
+        });
+    },
+
+    updatePassword(id, password) {
+        return new Promise((resolve, reject) => {
+            db.run(querys.updatePassword, [password, id], function(err) {
+                if (err) reject(err);
+                else resolve({ changes: this.changes });
+            });
+        });
+    },
+
+    getproducto() {
+        return new Promise((resolve, reject) => {
+            db.all(querys.getproducto, (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows || []);
+            });
+        });
+    },
+
+    insertproducto(code, name, brand, model, description, price, category_id) {
+        return new Promise((resolve, reject) => {
+            db.run(querys.insertproducto, [code, name, brand, model, description, price, category_id], function(err) {
+                if (err) reject(err);
+                else resolve({ id: this.lastID });
+            });
+        });
+    },
+
+    getproductoID(id) {
+        return new Promise((resolve, reject) => {
+            db.all(querys.getproductoID, [id], (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows || []);
+            });
+        });
+    },
+
+    updateproducto(id, code, name, brand, model, description, price, category_id) {
+        return new Promise((resolve, reject) => {
+            db.run(querys.updateproducto, [code, name, brand, model, description, price, category_id, id], function(err) {
+                if (err) reject(err);
+                else resolve({ changes: this.changes });
+            });
+        });
+    },
+
+    deleteproducto(id) {
+        return new Promise((resolve, reject) => {
+            db.run(querys.deleteproducto, [id], function(err) {
+                if (err) reject(err);
+                else resolve({ changes: this.changes });
+            });
+        });
+    },
+
+    getimagen() {
         return new Promise((resolve, reject) => {
             db.all(querys.getimagen, (err, rows) => {
-                if(err) reject(err);
-                resolve(rows);
-            })
-        })
+                if (err) reject(err);
+                else resolve(rows || []);
+            });
+        });
     },
 
-
-    getimagenID(id){
+    getimagenID(id) {
         return new Promise((resolve, reject) => {
             db.all(querys.getimagenID, [id], (err, rows) => {
-                if(err) reject(err);
-                resolve(rows);
-            })
-        })
+                if (err) reject(err);
+                else resolve(rows || []);
+            });
+        });
     },
 
-    insertimagen(url, producto_id, destacado){
+    insertimagen(url, producto_id, destacado) {
         return new Promise((resolve, reject) => {
-            db.run(querys.insertimagen, [url, producto_id, destacado], (err) => {
-                if(err) reject(err);
-                resolve();
-            })
-        })
+            db.run(querys.insertimagen, [url, producto_id, destacado], function(err) {
+                if (err) reject(err);
+                else resolve({ id: this.lastID });
+            });
+        });
     },
 
-    updateimagen(id, url, producto_id, destacado){
+    updateimagen(id, url, producto_id, destacado) {
         return new Promise((resolve, reject) => {
-            db.run(querys.updateimagen, [ url, producto_id, destacado, id], (err) => {
-                if(err) reject(err);
-                resolve();
-            })
-        })
+            db.run(querys.updateimagen, [url, producto_id, destacado, id], function(err) {
+                if (err) reject(err);
+                else resolve({ changes: this.changes });
+            });
+        });
     },
 
-    deleteimagen(id){
+    deleteimagen(id) {
         return new Promise((resolve, reject) => {
-            db.run(querys.deleteimagen, [id], (err) => {
-                if(err) reject(err);
-                resolve();
-            })
-        })
+            db.run(querys.deleteimagen, [id], function(err) {
+                if (err) reject(err);
+                else resolve({ changes: this.changes });
+            });
+        });
     },
 
-    getcategory(){
+    getcategory() {
         return new Promise((resolve, reject) => {
             db.all(querys.getcategory, (err, rows) => {
-                if(err) reject(err);
-                resolve(rows);
-            })
-        })
+                if (err) reject(err);
+                else resolve(rows || []);
+            });
+        });
     },
-    getcategoryID(id){
+
+    getcategoryID(id) {
         return new Promise((resolve, reject) => {
             db.all(querys.getcategoryID, [id], (err, rows) => {
-                if(err) reject(err);
-                resolve(rows);
-            })
-        })
-    },
-    
-    insertcategory(name, id){
-        return new Promise((resolve, reject) => {
-            db.all(querys.insertcategory, [name, id], (err) => {
-                if(err) reject(err);
-                resolve();
-            })
-        })
-    },
-
-    updatecategory(id, name){
-        return new Promise((resolve, reject) => {
-            db.run(querys.updatecategory, [name, id], (err) => {
-                if(err) reject(err);
-                resolve();
-            })
-        })
-    },
-
-    deletecategory(id){
-        return new Promise((resolve, reject) => {
-            db.run(querys.deletecategory, [id], (err) => {
-                if(err) reject(err);
-                resolve();
-            })
-        })
-    },
-    
-
-    consultable(producto_name, description, category_name, model, brand) {
-        return new Promise((resolve, reject) => {
-          let query = `
-            SELECT
-              producto.id AS producto_id,
-              producto.name AS producto_name,
-              producto.price AS price,
-              producto.description AS description,
-              producto.brand AS brand,
-              producto.model AS model,
-              imagen.url AS imagen_url,
-              category.name AS category_name
-            FROM category
-            INNER JOIN producto ON category.id = producto.category_id
-            INNER JOIN imagen ON imagen.id = producto.id
-          `;
-      
-          let whereClause = '';
-      
-          if (producto_name) {
-            whereClause += `producto.name LIKE '%${producto_name}%'`;
-          }
-      
-          if (description) {
-            if (whereClause.length > 0) {
-              whereClause += ` AND `;
-            }
-            whereClause += `producto.description LIKE '%${description}%'`;
-          }
-      
-          if (category_name) {
-            if (whereClause.length > 0) {
-              whereClause += ` AND `;
-            }
-            whereClause += `category.name = '${category_name}'`;
-          }
-      
-          if (model) {
-            if (whereClause.length > 0) {
-              whereClause += ` AND `;
-            }
-            whereClause += `producto.model LIKE '%${model}%'`;
-          }
-      
-          if (brand) {
-            if (whereClause.length > 0) {
-              whereClause += ` AND `;
-            }
-            whereClause += `producto.brand LIKE '%${brand}%'`;
-          }
-      
-          if (whereClause.length > 0) {
-            query += ` WHERE ${whereClause}`;
-          }
-      
-          db.all(query, (err, rows) => {
-            if (err) reject(err);
-            resolve(rows);
-          });
+                if (err) reject(err);
+                else resolve(rows || []);
+            });
         });
-      },
-    getdetalles(){
-        return new Promise((resolve, reject)=>{
-           db.all(querys.getdetalles ,(err, rows) => { 
-              if(err) reject(err);
-              resolve(rows);
+    },
+
+    insertcategory(name) {
+        return new Promise((resolve, reject) => {
+            db.run(querys.insertcategory, [name], function(err) {
+                if (err) reject(err);
+                else resolve({ id: this.lastID });
+            });
+        });
+    },
+
+    updatecategory(id, name) {
+        return new Promise((resolve, reject) => {
+            db.run(querys.updatecategory, [name, id], function(err) {
+                if (err) reject(err);
+                else resolve({ changes: this.changes });
+            });
+        });
+    },
+
+    deletecategory(id) {
+        return new Promise((resolve, reject) => {
+            db.run(querys.deletecategory, [id], function(err) {
+                if (err) reject(err);
+                else resolve({ changes: this.changes });
+            });
+        });
+    },
+
+    // Consulta parametrizada segura (Anti-SQLi) con JOIN corregido (imagen.producto_id = producto.id)
+    consultable(producto_name, description, category_name, brand, model) {
+        return new Promise((resolve, reject) => {
+            let query = `
+                SELECT
+                    producto.id AS producto_id,
+                    producto.name AS producto_name,
+                    producto.price AS price,
+                    producto.description AS description,
+                    producto.brand AS brand,
+                    producto.model AS model,
+                    producto.code AS code,
+                    COALESCE(imagen.url, 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500') AS imagen_url,
+                    COALESCE(category.name, 'General') AS category_name
+                FROM producto
+                LEFT JOIN category ON category.id = producto.category_id
+                LEFT JOIN imagen ON imagen.producto_id = producto.id
+            `;
+
+            const whereClauses = [];
+            const params = [];
+
+            if (producto_name && producto_name.trim() !== '') {
+                whereClauses.push('producto.name LIKE ?');
+                params.push(`%${producto_name.trim()}%`);
+            }
+
+            if (description && description.trim() !== '') {
+                whereClauses.push('producto.description LIKE ?');
+                params.push(`%${description.trim()}%`);
+            }
+
+            if (category_name && category_name.trim() !== '') {
+                whereClauses.push('category.name = ?');
+                params.push(category_name.trim());
+            }
+
+            if (model && model.trim() !== '') {
+                whereClauses.push('producto.model LIKE ?');
+                params.push(`%${model.trim()}%`);
+            }
+
+            if (brand && brand.trim() !== '') {
+                whereClauses.push('producto.brand LIKE ?');
+                params.push(`%${brand.trim()}%`);
+            }
+
+            if (whereClauses.length > 0) {
+                query += ` WHERE ${whereClauses.join(' AND ')}`;
+            }
+
+            query += ` GROUP BY producto.id ORDER BY producto.id ASC`;
+
+            db.all(query, params, (err, rows) => {
+                if (err) {
+                    console.error('Error en consultable:', err.message);
+                    reject(err);
+                } else {
+                    resolve(rows || []);
+                }
+            });
+        });
+    },
+
+    getdetalles(id) {
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT
+                    producto.id AS producto_id,
+                    producto.name AS producto_name,
+                    producto.code AS producto_code,
+                    producto.price AS price,
+                    producto.description AS description,
+                    producto.brand AS brand,
+                    producto.model AS model,
+                    COALESCE(category.name, 'General') AS category_name,
+                    COALESCE(imagen.url, 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500') AS imagen_url,
+                    imagen.id AS imagen_id
+                FROM producto
+                LEFT JOIN category ON category.id = producto.category_id
+                LEFT JOIN imagen ON imagen.producto_id = producto.id
+                WHERE producto.id = ?
+            `;
+            db.all(query, [id], (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows || []);
             });
         });
     }
-}
+};

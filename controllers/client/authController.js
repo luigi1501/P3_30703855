@@ -71,21 +71,24 @@ module.exports = {
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
-            await db.register(name, email, hashedPassword, 'user');
+            const regResult = await db.register(name, email, hashedPassword, 'user');
 
-            try {
-                const transporter = getTransporter();
-                await transporter.sendMail({
-                    from: process.env.EMAIL || 'keyboardsstore@gmail.com',
-                    to: email,
-                    subject: `¡Bienvenido a Keyboards Store, ${name}!`,
-                    text: `Hola ${name},\n\nTu registro se ha completado con éxito.`
-                });
-            } catch (emailErr) {
-                console.log('Aviso Email:', emailErr.message);
+            // Enviar email de bienvenida en segundo plano (sin await para no bloquear la respuesta HTTP)
+            if (process.env.EMAIL && process.env.PASS && process.env.PASS !== 'password_email_secret') {
+                try {
+                    const transporter = getTransporter();
+                    transporter.sendMail({
+                        from: process.env.EMAIL,
+                        to: email,
+                        subject: `¡Bienvenido a Keyboards Store, ${name}!`,
+                        text: `Hola ${name},\n\nTu registro se ha completado con éxito.`
+                    }).catch(emailErr => console.log('Aviso Email Registro:', emailErr.message));
+                } catch (emailErr) {
+                    console.log('Aviso Email Registro:', emailErr.message);
+                }
             }
 
-            req.session.user = { name, email, role: 'user' };
+            req.session.user = { id: regResult ? regResult.id : null, name, email, role: 'user' };
             return res.redirect('/pageini');
         } catch (err) {
             console.error('Error en registro:', err);
@@ -111,15 +114,21 @@ module.exports = {
 
             await db.setResetToken(email, resetToken, expires.toString());
 
-            const transporter = getTransporter();
-            const resetUrl = `http://${req.headers.host}/reset-password/${resetToken}`;
-
-            await transporter.sendMail({
-                from: process.env.EMAIL || 'keyboardsstore@gmail.com',
-                to: email,
-                subject: 'Solicitud de recuperación de contraseña',
-                text: `Has solicitado restablecer tu contraseña. Haz clic en el enlace para continuar: ${resetUrl}\n\nEste enlace expira en 1 hora.`
-            });
+            // Enviar correo de recuperación en segundo plano sin bloquear
+            if (process.env.EMAIL && process.env.PASS && process.env.PASS !== 'password_email_secret') {
+                try {
+                    const transporter = getTransporter();
+                    const resetUrl = `http://${req.headers.host}/reset-password/${resetToken}`;
+                    transporter.sendMail({
+                        from: process.env.EMAIL,
+                        to: email,
+                        subject: 'Solicitud de recuperación de contraseña',
+                        text: `Has solicitado restablecer tu contraseña. Haz clic en el enlace para continuar: ${resetUrl}\n\nEste enlace expira en 1 hora.`
+                    }).catch(emailErr => console.log('Aviso Email Recuperación:', emailErr.message));
+                } catch (emailErr) {
+                    console.log('Aviso Email Recuperación:', emailErr.message);
+                }
+            }
 
             res.render('client/password', { message: 'Se ha enviado un enlace seguro a tu correo electrónico.', error: null });
         } catch (err) {

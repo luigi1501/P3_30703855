@@ -46,6 +46,7 @@ router.get('/insertcat', isAdmin, categoryController.getCreateCategory);
 router.get('/admin/categories/insert', isAdmin, categoryController.getCreateCategory);
 router.post('/insertcat', isAdmin, categoryController.postCreateCategory);
 router.post('/admin/categories/insert', isAdmin, categoryController.postCreateCategory);
+router.post('/api/categories/quick-create', isAdmin, categoryController.quickCreateCategory);
 
 router.get('/editcat/:id', isAdmin, categoryController.getEditCategory);
 router.get('/admin/categories/edit/:id', isAdmin, categoryController.getEditCategory);

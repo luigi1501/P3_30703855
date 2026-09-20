@@ -9,7 +9,8 @@
         </div>
         <div class="admin-header-actions">
             <a href="/admin/dashboard" class="btn-secondary-sm"><i class="fa-solid fa-arrow-left"></i> Volver al Dashboard</a>
-            <a href="/insertcat" class="btn-primary-sm"><i class="fa-solid fa-plus"></i> Nueva Categoría</a>
+            <button type="button" class="btn-primary-sm" onclick="openCreateCatModal()"><i class="fa-solid fa-plus"></i> Nueva Categoría (Modal)</button>
+            <a href="/insertcat" class="btn-secondary-sm"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Página</a>
         </div>
     </div>
 
@@ -47,5 +48,39 @@
         </table>
     </div>
 </div>
+
+<!-- Modal Nueva Categoría -->
+<div id="modalCreateCategory" class="modal-overlay">
+    <div class="modal-container" style="max-width: 440px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+        <button type="button" class="modal-close-btn" onclick="closeCreateCatModal()">&times;</button>
+        <div style="text-align: center;">
+            <i class="fa-solid fa-tags" style="font-size: 2.2rem; color: #38bdf8; margin-bottom: 0.25rem;"></i>
+            <h2 style="color: #fff; font-size: 1.3rem; margin-bottom: 0.25rem;">Nueva Categoría</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Ingresa el nombre para añadir la categoría al catálogo</p>
+        </div>
+
+        <form action="/admin/categories/insert" method="POST" style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="input-group">
+                <label for="cat_name">Nombre de la Categoría</label>
+                <input type="text" id="cat_name" name="name" class="form-control" placeholder="Ej. Keycaps PBT, Switches Tactiles" required>
+            </div>
+
+            <div class="responsive-btn-group" style="margin-top: 0.5rem;">
+                <button type="button" class="btn-secondary-sm" onclick="closeCreateCatModal()">Cancelar</button>
+                <button type="submit" class="btn-primary-sm"><i class="fa-solid fa-check"></i> Guardar Categoría</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openCreateCatModal() {
+        document.getElementById('modalCreateCategory').classList.add('active');
+        document.getElementById('cat_name').focus();
+    }
+    function closeCreateCatModal() {
+        document.getElementById('modalCreateCategory').classList.remove('active');
+    }
+</script>
 
 <%- include('../../partials/footer') %>

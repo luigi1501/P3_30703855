@@ -54,5 +54,26 @@ module.exports = {
         } catch (err) {
             res.redirect('/admin/categories');
         }
+    },
+
+    // AJAX Quick-Create Categoría (para modales e inserción rápida en formularios)
+    async quickCreateCategory(req, res) {
+        try {
+            const { name } = req.body;
+            if (!name || !name.trim()) {
+                return res.status(400).json({ success: false, message: 'El nombre de la categoría es requerido.' });
+            }
+            const result = await db.insertcategory(name.trim());
+            return res.json({
+                success: true,
+                category: {
+                    id: result.id,
+                    name: name.trim()
+                }
+            });
+        } catch (err) {
+            console.error('Error al crear categoría rápida:', err.message);
+            return res.status(500).json({ success: false, message: 'Error al registrar categoría.' });
+        }
     }
 };

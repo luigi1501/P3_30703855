@@ -258,7 +258,7 @@ module.exports = {
         });
     },
 
-    // Consulta parametrizada segura (Anti-SQLi) con JOIN corregido (imagen.producto_id = producto.id)
+    // Consulta parametrizada segura (Anti-SQLi) — imagen preferida: destacado='SI' primero
     consultable(producto_name, description, category_name, brand, model) {
         return new Promise((resolve, reject) => {
             let query = `
@@ -270,11 +270,22 @@ module.exports = {
                     producto.brand AS brand,
                     producto.model AS model,
                     producto.code AS code,
-                    COALESCE(imagen.url, 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500') AS imagen_url,
+                    COALESCE(
+                        (
+                            SELECT url FROM imagen
+                            WHERE imagen.producto_id = producto.id AND imagen.destacado = 'SI'
+                            LIMIT 1
+                        ),
+                        (
+                            SELECT url FROM imagen
+                            WHERE imagen.producto_id = producto.id
+                            LIMIT 1
+                        ),
+                        'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500'
+                    ) AS imagen_url,
                     COALESCE(category.name, 'General') AS category_name
                 FROM producto
                 LEFT JOIN category ON category.id = producto.category_id
-                LEFT JOIN imagen ON imagen.producto_id = producto.id
             `;
 
             const whereClauses = [];
@@ -309,7 +320,7 @@ module.exports = {
                 query += ` WHERE ${whereClauses.join(' AND ')}`;
             }
 
-            query += ` GROUP BY producto.id ORDER BY producto.id ASC`;
+            query += ` ORDER BY producto.id ASC`;
 
             db.all(query, params, (err, rows) => {
                 if (err) {
@@ -334,11 +345,21 @@ module.exports = {
                     producto.brand AS brand,
                     producto.model AS model,
                     COALESCE(category.name, 'General') AS category_name,
-                    COALESCE(imagen.url, 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500') AS imagen_url,
-                    imagen.id AS imagen_id
+                    COALESCE(
+                        (
+                            SELECT url FROM imagen
+                            WHERE imagen.producto_id = producto.id AND imagen.destacado = 'SI'
+                            LIMIT 1
+                        ),
+                        (
+                            SELECT url FROM imagen
+                            WHERE imagen.producto_id = producto.id
+                            LIMIT 1
+                        ),
+                        'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500'
+                    ) AS imagen_url
                 FROM producto
                 LEFT JOIN category ON category.id = producto.category_id
-                LEFT JOIN imagen ON imagen.producto_id = producto.id
                 WHERE producto.id = ?
             `;
             db.all(query, [id], (err, rows) => {

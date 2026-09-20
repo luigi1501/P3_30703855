@@ -13,6 +13,7 @@
 ## ✨ Características Principales
 
 ### 🛍️ Experiencia del Cliente
+
 * **Catálogo Interactivo con Búsqueda en Tiempo Real:** Filtrado dinámico de productos por categoría y barra de búsqueda en vivo.
 * **Efecto Typing / Mecanografiado:** Al buscar o cuando un filtro no produce resultados, aparece una interfaz animada tipo teclado escribiendo letra por letra.
 * **Carrito y Checkout:** Sistema de carrito persistente con cálculo automático de totales y procesamiento de pagos con pasarela cifrada (Bearer Token JWT).

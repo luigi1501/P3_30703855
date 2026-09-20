@@ -2,12 +2,12 @@
 <%- include('../../partials/navbar') %>
 
 <div class="admin-container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div class="admin-page-header">
         <div>
             <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800;">Gestión de Categorías</h1>
             <p style="color: var(--text-muted);">Total de registros: <%= category.length %></p>
         </div>
-        <div style="display: flex; gap: 1rem;">
+        <div class="admin-header-actions">
             <a href="/admin/dashboard" class="btn-secondary-sm"><i class="fa-solid fa-arrow-left"></i> Volver al Dashboard</a>
             <a href="/insertcat" class="btn-primary-sm"><i class="fa-solid fa-plus"></i> Nueva Categoría</a>
         </div>
